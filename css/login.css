@@ -1,0 +1,255 @@
+/* =========================================================
+   INICIO DE SESIÓN Y CREAR CUENTA
+   Tarjeta negra con dorado sobre un video de una Biblia.
+   ========================================================= */
+.auth {
+  --a-dorado: #D9B866;
+  --a-dorado-claro: #F0D596;
+  --a-dorado-oscuro: #B38E45;
+  --a-borde: rgba(217, 184, 102, 0.28);
+  --a-campo: rgba(255, 255, 255, 0.05);
+  --a-gris: #A79F91;
+  --a-error: #F0A08F;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  background: #070B0D;
+  color: #F5EEE0;
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.auth.saliendo { opacity: 0; transform: scale(0.97); }
+
+/* ---- Fondo: video de unas manos pasando las hojas de una Biblia ---- */
+.auth-fondo {
+  --alto-video: 100%;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #070B0D;
+}
+.auth-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--alto-video);
+  object-fit: cover;
+  object-position: 50% 40%;
+  filter: brightness(0.82) saturate(0.92);
+  transition: opacity 0.6s ease;
+}
+/* Oculta el salto cuando el video vuelve a empezar */
+.auth-video.fundido { opacity: 0; }
+/* Viñeta para que la tarjeta destaque */
+.auth-fondo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(4, 6, 8, 0.05) 35%, rgba(4, 6, 8, 0.68) 100%);
+}
+
+/* ---- Tarjeta ---- */
+.auth-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: safe center; /* "safe": si la tarjeta no cabe, no se corta por arriba */
+  justify-content: center;
+  min-height: 100%;
+  padding: 28px 16px;
+}
+.auth-caja {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem 1.9rem 2.1rem;
+  border: 1px solid var(--a-borde);
+  border-radius: 20px;
+  background: rgba(7, 7, 6, 0.93);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+}
+.auth-emblema {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 0.9rem;
+  border: 2px solid var(--a-dorado);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 184, 102, 0.2), transparent 72%);
+  box-shadow: 0 0 26px rgba(217, 184, 102, 0.28);
+}
+.auth-emblema svg { width: 44px; height: 44px; fill: none; stroke: var(--a-dorado-claro); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.auth-logo {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.45rem;
+  letter-spacing: 0.14em;
+  text-align: center;
+  color: var(--a-dorado);
+}
+.auth-lema { margin: 0.25rem 0 1.2rem; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; text-align: center; }
+.auth-versiculo {
+  margin: 0 0 1.3rem;
+  padding: 0.15rem 0 0.15rem 0.85rem;
+  border-left: 2px solid var(--a-dorado-oscuro);
+  font: italic 500 1.08rem/1.35 "Cormorant Garamond", Georgia, serif;
+  color: #E7CF96;
+}
+.auth-versiculo cite { font-style: normal; white-space: nowrap; }
+
+/* Visible solo para lectores de pantalla: las pestañas ya dicen el modo */
+.auth-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Transición suave al cambiar de pestaña */
+.auth-animar { animation: auth-entrar 0.4s ease both; }
+@keyframes auth-entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Selector de pestañas */
+.a-pestanas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  margin-bottom: 0.9rem;
+  border: 1px solid var(--a-borde);
+  border-radius: 10px;
+}
+.a-pestana {
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: 500 0.95rem "Source Sans 3", sans-serif;
+  color: var(--a-gris);
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.a-pestana.activa { background: rgba(217, 184, 102, 0.16); color: var(--a-dorado-claro); font-weight: 700; }
+
+/* Botones */
+.a-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 50px;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: 700 1.05rem "Source Sans 3", sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.a-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(217, 184, 102, 0.22); filter: brightness(1.06); }
+.a-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+.a-btn-entrar { background: linear-gradient(100deg, var(--a-dorado-oscuro), var(--a-dorado-claro)); color: #1A1408; }
+.a-btn-google { background: transparent; border-color: var(--a-borde); color: #F5EEE0; font-weight: 600; }
+.a-btn-google svg { width: 20px; height: 20px; }
+
+/* Campos */
+.a-form { display: grid; gap: 0.75rem; }
+.a-campo { display: grid; gap: 0.3rem; }
+.a-entrada { position: relative; }
+.a-entrada > svg {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  fill: var(--a-dorado);
+  pointer-events: none;
+}
+.a-campo input {
+  width: 100%;
+  height: 48px;
+  padding: 0 1rem 0 2.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: var(--a-campo);
+  font: 1rem "Source Sans 3", sans-serif;
+  color: #F5EEE0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.a-campo input::placeholder { color: var(--a-gris); }
+.a-campo input:focus { outline: none; border-color: var(--a-dorado); box-shadow: 0 0 0 3px rgba(217, 184, 102, 0.2); }
+.a-campo input[aria-invalid="true"] { border-color: var(--a-error); }
+/* Evita el fondo claro del autocompletado del navegador */
+.a-campo input:-webkit-autofill {
+  -webkit-text-fill-color: #F5EEE0;
+  box-shadow: 0 0 0 40px #171614 inset;
+  caret-color: #F5EEE0;
+}
+.a-error { margin: 0; font-size: 0.85rem; color: var(--a-error); }
+.a-error:empty, .a-mensaje:empty { display: none; }
+.a-campo-extra { animation: auth-entrar 0.35s ease both; }
+.a-con-boton input { padding-right: 5rem; }
+.a-ver {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem 0.6rem;
+  border: 0;
+  background: none;
+  font: 700 0.9rem "Source Sans 3", sans-serif;
+  color: var(--a-dorado);
+  cursor: pointer;
+}
+.a-enlace {
+  justify-self: end;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 0.9rem "Source Sans 3", sans-serif;
+  color: var(--a-dorado);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.a-mensaje { margin: 0; font-size: 0.95rem; color: var(--a-error); }
+.a-mensaje.exito { color: #9BD6B4; }
+.a-separador { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; color: var(--a-gris); }
+.a-separador::before, .a-separador::after { content: ""; flex: 1; height: 1px; background: var(--a-borde); }
+.auth :focus-visible { outline: 3px solid var(--a-dorado); outline-offset: 2px; }
+
+/* En celular el video es una franja arriba, para que se vean las dos manos */
+@media (max-width: 640px) {
+  .auth-fondo { --alto-video: min(62vw, 38vh); }
+  .auth-fondo::after { background: linear-gradient(to bottom, transparent calc(var(--alto-video) - 90px), #070B0D var(--alto-video)); }
+  .auth-panel { align-items: flex-end; padding-top: calc(var(--alto-video) - 28px); }
+  .auth-logo { font-size: 1.2rem; letter-spacing: 0.1em; }
+}
+
+/* Usuario en la navbar */
+.usuario { display: flex; align-items: center; gap: 0.55rem; margin-left: 0.4rem; padding-left: 0.9rem; border-left: 1px solid var(--borde-vidrio); }
+.usuario-perfil { display: flex; align-items: center; gap: 0.55rem; border-radius: 999px; text-decoration: none; transition: color 0.2s; }
+.usuario-perfil:hover { color: var(--ocre); }
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--ocre);
+  background: rgba(233, 162, 59, 0.15);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ocre);
+  object-fit: cover;
+}
+.usuario-nombre { max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.85rem; }
+
+@media (max-width: 899px) {
+  .usuario-nombre { display: none; }
+}

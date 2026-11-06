@@ -1,0 +1,282 @@
+/* =========================================================
+   PORTADA "MÉRIDA SACRA"
+   Se puede quitar borrando este archivo, portada.js y el bloque
+   marcado como PORTADA en index.html.
+   ========================================================= */
+
+/* Colores propios de la portada */
+.sacra {
+  --dorado: #C9A55C;
+  --dorado-brillo: #E3C27A;
+  --tinta: #0B0E14;
+  --gris-calido: #A9A294;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Escena nocturna (fija detrás de la portada) ---------- */
+.sacra-escena {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: -100vh;
+  overflow: hidden;
+  pointer-events: none;
+  /* Cielo: azul noche arriba, horizonte color ladrillo abajo */
+  background: linear-gradient(to bottom, #070B1A 0%, #0B1128 40%, #17172A 70%, #3A2A1E 100%);
+}
+
+/* Estrellas: las crea portada.js dentro del 70% superior */
+.sacra-estrellas { position: absolute; inset: 0 0 30% 0; }
+.sacra-estrella {
+  position: absolute;
+  width: var(--tam);
+  height: var(--tam);
+  border-radius: 50%;
+  background: #FFF6E0;
+  opacity: 0.15;
+  animation: sacra-parpadeo var(--duracion) ease-in-out var(--retraso) infinite alternate;
+}
+@keyframes sacra-parpadeo { from { opacity: 0.15; } to { opacity: 0.9; } }
+
+/* Luna con halo dorado de varias capas */
+.sacra-luna {
+  position: absolute;
+  top: 14vh;
+  right: 12vw;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FBF4E2, #E4D4AE 60%, #CDB98C);
+  box-shadow:
+    0 0 20px rgba(227, 194, 122, 0.45),
+    0 0 60px rgba(227, 194, 122, 0.25),
+    0 0 140px rgba(227, 194, 122, 0.15),
+    0 0 260px rgba(201, 165, 92, 0.08);
+}
+
+/* Laureles de la plaza (silueta SVG reutilizada con <use>) */
+.sacra-laurel {
+  position: absolute;
+  bottom: 12vh;
+  width: 38vw;
+  max-width: 300px;
+  aspect-ratio: 1 / 2;
+  height: auto;
+  color: #04060B;
+}
+.sacra-laurel.izquierdo { left: -14vw; }
+.sacra-laurel.derecho { right: -14vw; transform: scaleX(-1); }
+
+/* Piso de la plaza con el reflejo dorado de las fachadas */
+.sacra-plaza {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16vh;
+  border-top: 1px solid rgba(201, 165, 92, 0.12);
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 0%, rgba(227, 194, 122, 0.12), transparent 70%),
+    linear-gradient(to bottom, #120F12, #07080C);
+}
+
+/* ---------- Textura de grano en toda la página ---------- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Luz de vela que sigue al cursor ---------- */
+.sacra-vela {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 600px;
+  height: 600px;
+  margin: -300px 0 0 -300px; /* centrada en el cursor */
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(227, 194, 122, 0.08), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.sacra-vela.encendida { opacity: 1; }
+
+/* ---------- Contenido centrado ---------- */
+.sacra-contenido {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--nav) + 24px) 16px 120px;
+  text-align: center;
+}
+
+.sacra-etiqueta {
+  margin: 0 0 1.2rem;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--dorado);
+}
+
+.sacra-titulo {
+  max-width: 14ch;
+  margin: 0 0 1.4rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(44px, min(8vw, 10vh), 96px);
+  line-height: 1.02;
+  color: var(--texto);
+}
+.sacra-titulo em { font-style: italic; color: var(--dorado-brillo); }
+
+.sacra-texto {
+  max-width: 600px;
+  margin: 0 0 2.2rem;
+  line-height: 1.7;
+  color: var(--gris-calido);
+  font-weight: 300;
+}
+
+/* Contadores: número arriba, etiqueta abajo, separados por líneas doradas */
+.sacra-contadores {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 2.4rem;
+}
+.sacra-contadores > div {
+  display: flex;
+  flex-direction: column-reverse; /* en el HTML va dt/dd, pero el número se ve arriba */
+  padding: 0 clamp(14px, 4vw, 40px);
+}
+.sacra-contadores > div + div { border-left: 1px solid rgba(201, 165, 92, 0.18); }
+.sacra-contadores dd {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--dorado-brillo);
+  font-variant-numeric: tabular-nums;
+}
+.sacra-contadores dt {
+  margin-top: 0.5rem;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gris-calido);
+}
+
+/* Botones tipo píldora */
+.sacra-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+.sacra-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  height: 50px;
+  padding: 0 28px;
+  border: 1px solid var(--dorado);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--dorado-brillo);
+  font-family: "Work Sans", sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.25s, color 0.25s, transform 0.25s;
+}
+.sacra-boton svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sacra-boton:hover { background: rgba(201, 165, 92, 0.12); transform: translateY(-2px); }
+.sacra-boton.principal { background: var(--dorado); color: var(--tinta); }
+.sacra-boton.principal:hover { background: var(--dorado-brillo); }
+.sacra :focus-visible { outline: 2px solid var(--dorado-brillo); outline-offset: 3px; }
+
+/* Indicador "Desliza": ratón con rueda que baja */
+.sacra-desliza {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gris-calido);
+  text-decoration: none;
+}
+.sacra-raton {
+  position: relative;
+  width: 22px;
+  height: 36px;
+  border: 1.5px solid var(--dorado);
+  border-radius: 11px;
+}
+.sacra-raton::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 3px;
+  height: 7px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--dorado-brillo);
+  animation: sacra-rueda 1.8s ease-in-out infinite;
+}
+@keyframes sacra-rueda {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+/* Aparición escalonada (la activa portada.js con IntersectionObserver) */
+.sacra-revelar {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: calc(var(--orden, 0) * 90ms);
+}
+.sacra-revelar.visible { opacity: 1; transform: none; }
+
+/* ---------- Tableta (640px o más) ---------- */
+@media (min-width: 640px) {
+  .sacra-botones { flex-direction: row; flex-wrap: wrap; justify-content: center; max-width: none; }
+}
+
+/* ---------- Computadora (1024px o más) ---------- */
+@media (min-width: 1024px) {
+  .sacra-luna { width: 84px; height: 84px; }
+  .sacra-laurel.izquierdo { left: -4vw; }
+  .sacra-laurel.derecho { right: -4vw; }
+}
+
+/* ---------- Menos movimiento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .sacra-estrella { animation: none; opacity: 0.6; }
+  .sacra-raton::before { animation: none; }
+  .sacra-vela { display: none; }
+  .sacra-revelar { opacity: 1; transform: none; transition: none; }
+}

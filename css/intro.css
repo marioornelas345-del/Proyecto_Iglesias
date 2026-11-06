@@ -1,0 +1,57 @@
+/* =========================================================
+   ANIMACIÓN DE ENTRADA
+   ========================================================= */
+/* Se muestra DESPUÉS de iniciar sesión. Dura unos 5 segundos:
+   1) el logo se dibuja y se acerca lentamente,
+   2) la cámara hace zoom a través de la puerta del logo
+   3) y la escena "llega" a la pantalla desde lejos. */
+[hidden] { display: none !important; }
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.6rem;
+  background: #000;
+  overflow: hidden;
+}
+.intro svg {
+  width: 110px;
+  height: auto;
+  transform-origin: 50% 88%; /* centro de la puerta del logo */
+  animation: acercar 3s cubic-bezier(0.33, 0, 0.2, 1) forwards;
+}
+.intro svg * {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: trazar 2s ease forwards;
+}
+.intro p {
+  margin: 0;
+  font-family: var(--titulos);
+  font-size: 0.85rem;
+  letter-spacing: 0.42em;
+  color: var(--ocre);
+  opacity: 0;
+  animation: aparecer 1.2s ease 0.9s forwards;
+}
+.intro .bienvenida { font-family: var(--cuerpo); font-size: 0.85rem; letter-spacing: 0.08em; color: var(--texto-suave); animation-delay: 1.5s; }
+@keyframes trazar { to { stroke-dashoffset: 0; } }
+@keyframes aparecer { to { opacity: 1; } }
+@keyframes acercar { from { transform: scale(0.7); } to { transform: scale(1.15); } }
+
+/* Fase 2: zoom a través de la puerta */
+.intro.zoom svg { animation: atravesar 1.5s cubic-bezier(0.7, 0, 0.84, 0) forwards; }
+.intro.zoom p { animation: desvanecer 0.5s ease forwards; }
+.intro.zoom { animation: abrir 1.6s ease forwards; }
+@keyframes atravesar { from { transform: scale(1.15); } to { transform: scale(40); } }
+@keyframes desvanecer { from { opacity: 1; } to { opacity: 0; } }
+@keyframes abrir { 0%, 45% { background-color: #000; opacity: 1; } 100% { background-color: transparent; opacity: 0; } }
+
+/* Fase 3: la escena y la página llegan desde lejos hasta la pantalla */
+.llegando .escena { animation: llegar-escena 2.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.llegando #app { animation: llegar 2.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes llegar-escena { from { transform: scale(1.6); filter: blur(10px); } to { transform: none; filter: none; } }
+@keyframes llegar { from { transform: scale(1.35); opacity: 0; filter: blur(8px); } 40% { opacity: 1; } to { transform: none; opacity: 1; filter: none; } }

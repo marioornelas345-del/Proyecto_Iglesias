@@ -1,0 +1,71 @@
+/* =========================================================
+   ESCENA NOCTURNA (fondo fijo)
+   ========================================================= */
+.escena { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.cielo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--noche-1) 0%, var(--noche-2) 38%, var(--noche-3) 58%, #6b4b5c 68%, var(--horizonte) 76%, #3a2228 80%);
+}
+/* Resplandor cálido de la ciudad en el horizonte */
+.cielo::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 18%;
+  width: 140%;
+  height: 40%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center bottom, rgba(233, 162, 59, 0.35), transparent 65%);
+}
+.estrella {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  animation: titilar 3s ease-in-out infinite;
+}
+@keyframes titilar { 50% { opacity: 0.25; } }
+.luna {
+  position: absolute;
+  top: 12%;
+  right: 9%;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #fffaf0, #f1e6cc 55%, #d9caa6);
+  box-shadow: 0 0 40px 10px rgba(255, 244, 214, 0.28), 0 0 120px 40px rgba(255, 244, 214, 0.1);
+}
+.luna::before, .luna::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(170, 155, 120, 0.25);
+}
+.luna::before { width: 14px; height: 14px; top: 20px; left: 36px; }
+.luna::after { width: 9px; height: 9px; top: 44px; left: 20px; }
+
+/* Plaza oscura con baldosas en perspectiva */
+.plaza {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22%;
+  background: linear-gradient(180deg, #24171c 0%, var(--plaza) 60%);
+  overflow: hidden;
+}
+.plaza::before {
+  content: "";
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  top: 0;
+  height: 200%;
+  background:
+    repeating-linear-gradient(90deg, rgba(233, 162, 59, 0.06) 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(0deg, rgba(233, 162, 59, 0.05) 0 1px, transparent 1px 60px);
+  transform: perspective(300px) rotateX(62deg);
+  transform-origin: top;
+}

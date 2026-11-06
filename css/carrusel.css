@@ -1,0 +1,228 @@
+/* =========================================================
+   CARRUSEL (escenario principal)
+   ========================================================= */
+.portada {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: var(--nav);
+}
+.escenario {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: clamp(16px, 3vw, 48px);
+  padding: 0 clamp(16px, 4vw, 56px);
+  touch-action: pan-y;
+}
+
+/* Cada bloque animado tiene un retraso distinto (--i) */
+.anim {
+  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.saliendo .anim { opacity: 0; transform: translateX(calc(var(--dir) * -48px)); transition-delay: 0ms; }
+.entrando .anim { opacity: 0; transform: translateX(calc(var(--dir) * 48px)); transition: none; }
+.saliendo .fachada.anim { transform: translateX(calc(var(--dir) * -90px)) scale(0.94); }
+.entrando .fachada.anim { transform: translateX(calc(var(--dir) * 90px)) scale(0.94); }
+
+/* Texto de la izquierda */
+.etiqueta {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 999px;
+  background: var(--vidrio);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+.titulo {
+  margin: 1.1rem 0 0.6rem;
+  font-family: var(--titulos);
+  line-height: 1.05;
+  font-size: clamp(2.1rem, 3.6vw, 3.4rem);
+}
+.titulo b { display: block; font-weight: 700; font-size: 0.62em; letter-spacing: 0.04em; }
+.titulo span { display: block; font-weight: 400; }
+.subtitulo { margin: 0 0 1rem; color: var(--ocre); font-weight: 500; letter-spacing: 0.02em; }
+.descripcion { margin: 0 0 1.8rem; max-width: 40ch; line-height: 1.65; color: var(--texto-suave); font-weight: 300; }
+.anio { display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 1.6rem; }
+.anio strong { font-family: var(--titulos); font-weight: 700; font-size: clamp(2.6rem, 4.6vw, 4.2rem); line-height: 1; letter-spacing: 0.02em; }
+.anio small { font-size: 0.8rem; color: var(--texto-suave); max-width: 12ch; line-height: 1.3; }
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: 999px;
+  background: var(--ocre);
+  color: #1a1206;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(233, 162, 59, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.boton:hover { transform: translateY(-2px); background: var(--ocre-claro); box-shadow: 0 14px 36px rgba(233, 162, 59, 0.45); }
+
+/* Fachada central */
+.fachada { position: relative; align-self: end; }
+.fachada svg { display: block; width: 100%; height: auto; max-height: 64vh; margin: 0 auto; }
+/* Reflejo cálido de las puertas sobre la plaza */
+.fachada::after {
+  content: "";
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  bottom: -12px;
+  height: 30px;
+  background: radial-gradient(ellipse, rgba(255, 200, 100, 0.35), transparent 70%);
+  filter: blur(6px);
+}
+
+/* Foto real de Wikimedia Commons dentro de un marco en arco colonial */
+.foto { margin: 0; }
+.foto-marco {
+  position: relative;
+  width: min(100%, calc(62vh * 0.8));
+  aspect-ratio: 4 / 5;
+  margin: 0 auto;
+  border-radius: 999px 999px 18px 18px;
+  overflow: hidden;
+  border: 1px solid rgba(233, 162, 59, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 0 8px rgba(233, 162, 59, 0.07), 0 0 80px rgba(233, 162, 59, 0.12);
+}
+.foto-marco img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Un toque de contraste y color para que la foto se vea nítida en la escena nocturna */
+  filter: brightness(0.96) saturate(1.06) contrast(1.06);
+}
+.foto-marco::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(19, 32, 74, 0.28) 0%, transparent 26%, transparent 70%, rgba(16, 13, 18, 0.55) 100%);
+  pointer-events: none;
+}
+.foto figcaption {
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--texto-suave);
+}
+.foto figcaption a { color: var(--texto-suave); }
+.miniatura img {
+  width: 46px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 999px 999px 4px 4px;
+}
+
+/* Ficha glassmorphism */
+.ficha {
+  padding: 1.6rem;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+.ficha h2 {
+  margin: 0 0 1.1rem;
+  font-family: var(--titulos);
+  font-size: 0.85rem;
+  letter-spacing: 0.24em;
+  color: var(--ocre);
+}
+.ficha dl { margin: 0; display: grid; gap: 1rem; }
+.ficha div { padding-bottom: 1rem; border-bottom: 1px solid var(--borde-vidrio); }
+.ficha div:last-child { padding-bottom: 0; border-bottom: 0; }
+.ficha dt { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--texto-suave); margin-bottom: 0.25rem; }
+.ficha dd { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+
+/* =========================================================
+   BARRA INFERIOR
+   ========================================================= */
+.barra {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(220px, 0.6fr);
+  align-items: center;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 1.2rem clamp(16px, 4vw, 56px) 1.6rem;
+}
+.controles { display: flex; align-items: center; gap: 1rem; }
+.flecha {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--borde-vidrio);
+  background: var(--vidrio);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+.flecha:hover { transform: scale(1.06); }
+.flecha.siguiente { background: var(--ocre); border-color: var(--ocre); color: #1a1206; }
+.contador { font-family: var(--titulos); font-size: 0.95rem; letter-spacing: 0.1em; min-width: 4.5ch; text-align: center; }
+.contador b { font-size: 1.35rem; color: var(--ocre); }
+
+.miniaturas { display: flex; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+.miniatura {
+  flex: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0.4rem 0.3rem 0.5rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.25s, border-color 0.25s;
+}
+.miniatura:hover { opacity: 0.85; }
+.miniatura.activa { opacity: 1; border-bottom-color: var(--ocre); }
+.miniatura svg { width: 56px; height: 46px; }
+.miniatura span { font-size: 0.7rem; line-height: 1.2; text-align: center; }
+.miniatura small { font-family: var(--titulos); font-size: 0.68rem; color: var(--ocre); }
+
+.linea { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.8rem; font-family: var(--titulos); font-size: 0.85rem; }
+.linea-pista { position: relative; height: 2px; background: rgba(255, 255, 255, 0.18); border-radius: 2px; }
+.linea-relleno { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ocre); border-radius: 2px; transition: width 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.linea-marca {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transform: translate(-50%, -50%);
+}
+.linea-punto {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ocre);
+  box-shadow: 0 0 0 5px rgba(233, 162, 59, 0.25);
+  transform: translate(-50%, -50%);
+  transition: left 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}

@@ -1,0 +1,506 @@
+/* =========================================================
+   TODAS LAS IGLESIAS (tarjetas + ficha completa + mapa)
+   ========================================================= */
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin: 2rem 0 2.5rem;
+}
+.tarjeta {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 999px 999px 16px 16px;
+  overflow: hidden;
+  background: var(--vidrio);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.tarjeta:hover { transform: translateY(-4px); }
+.tarjeta.activa { border-color: var(--ocre); box-shadow: 0 0 0 2px var(--ocre), 0 18px 40px rgba(233, 162, 59, 0.2); }
+.tarjeta-foto { display: block; aspect-ratio: 3 / 4; }
+.tarjeta-foto img, .tarjeta-foto svg { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.9) saturate(1.04); transition: filter 0.25s; }
+.tarjeta:hover img, .tarjeta.activa img { filter: brightness(1) saturate(1.06); }
+.tarjeta::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(8, 8, 14, 0.92)); pointer-events: none; }
+.tarjeta-num { position: absolute; top: 18%; left: 50%; transform: translateX(-50%); z-index: 1; font-family: var(--titulos); font-size: 0.8rem; color: var(--ocre); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
+.tarjeta-texto { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 1; display: grid; gap: 0.15rem; }
+.tarjeta-texto small { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--texto-suave); }
+.tarjeta-texto strong { font-family: var(--titulos); font-size: 0.95rem; line-height: 1.15; }
+.tarjeta-texto em { font-style: normal; font-family: var(--titulos); color: var(--ocre); font-size: 0.85rem; }
+
+.detalle {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;
+  scroll-margin-top: 24px;
+}
+.info {
+  padding: clamp(20px, 3vw, 36px);
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+}
+.info .titulo { margin-top: 0.9rem; font-size: clamp(1.9rem, 3vw, 2.7rem); }
+.galeria { margin: 1.4rem 0; }
+.galeria-principal { aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; background: rgba(0, 0, 0, 0.3); }
+.galeria-principal img, .galeria-principal svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.galeria figcaption { margin-top: 0.5rem; font-size: 0.7rem; color: var(--texto-suave); }
+.galeria figcaption a { color: inherit; }
+.galeria-miniaturas { display: flex; gap: 8px; margin-top: 0.8rem; }
+.galeria-miniaturas button { flex: 1; max-width: 96px; aspect-ratio: 4 / 3; padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: none; cursor: pointer; opacity: 0.6; transition: opacity 0.2s, border-color 0.2s; }
+.galeria-miniaturas button:hover { opacity: 0.9; }
+.galeria-miniaturas button.activa { opacity: 1; border-color: var(--ocre); }
+.galeria-miniaturas img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.info-texto { margin: 0 0 1.4rem; line-height: 1.85; color: var(--texto-suave); font-weight: 300; }
+/* Lo más importante del párrafo: subrayado en ocre */
+.info-texto strong {
+  color: var(--texto);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--ocre);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.info-dato { padding: 0.9rem 1.1rem; border-radius: 12px; background: rgba(233, 162, 59, 0.12); line-height: 1.6; }
+.info-dato b { color: var(--ocre); }
+.info-acciones { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.4rem; }
+.boton-contorno {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9rem 1.4rem;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 999px;
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.boton-contorno:hover { border-color: var(--ocre); color: var(--ocre); }
+
+.mapa { height: min(78vh, 720px); min-height: 420px; border: 1px solid var(--borde-vidrio); border-radius: 22px; overflow: hidden; background: #0b0f1a; }
+/* Botón ocre usado como <button> */
+button.boton { border: 0; cursor: pointer; font-family: inherit; }
+
+/* Selector "A pie / En auto" */
+.modo-ruta { display: inline-flex; padding: 4px; border: 1px solid var(--borde-vidrio); border-radius: 999px; }
+.modo-ruta button { padding: 0.65rem 1rem; border: 0; border-radius: 999px; background: none; font-size: 0.85rem; cursor: pointer; color: var(--texto-suave); transition: background 0.2s, color 0.2s; }
+.modo-ruta button[aria-pressed="true"] { background: var(--texto); color: #120f14; font-weight: 600; }
+
+.mapa-marco { position: relative; }
+
+/* Tarjeta de la iglesia elegida, sobre el mapa */
+.mapa-ficha {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 600;
+  width: min(340px, calc(100% - 28px));
+  padding: 14px 16px;
+  border: 1px solid rgba(246, 200, 119, 0.45);
+  border-radius: 16px;
+  background: rgba(10, 13, 30, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+.mapa-ficha-cabeza { display: flex; gap: 12px; align-items: center; }
+.mapa-ficha-cabeza img { flex: none; width: 64px; height: 64px; border: 1px solid rgba(246, 200, 119, 0.5); border-radius: 12px; object-fit: cover; }
+.mapa-ficha-num { font: 600 0.62rem var(--titulos); letter-spacing: 0.2em; color: var(--ocre-claro); }
+.mapa-ficha h3 { margin: 0.1rem 0 0; font: 600 1.3rem/1.15 "Cormorant Garamond", Georgia, serif; color: var(--texto); }
+.mapa-ficha-barrio { margin: 0.1rem 0 0; font-size: 0.78rem; color: var(--texto-suave); }
+.mapa-ficha-direccion { display: flex; gap: 8px; align-items: flex-start; margin: 0.8rem 0 0; padding-top: 0.75rem; border-top: 1px solid var(--borde-vidrio); font-size: 0.84rem; line-height: 1.5; color: var(--texto-suave); }
+.mapa-ficha-direccion strong { color: var(--texto); font-weight: 600; }
+.icono-ubicacion { flex: none; width: 18px; height: 18px; margin-top: 1px; fill: var(--ocre-claro); }
+.mapa-ficha-acciones { display: grid; grid-template-columns: auto 1fr 1fr auto; gap: 6px; margin-top: 0.8rem; }
+.mapa-ficha-acciones > * { justify-content: center; min-height: 38px; padding: 0.45rem 0.7rem; font: inherit; font-size: 0.78rem; text-align: center; }
+.mapa-ficha-acciones .boton { display: inline-flex; align-items: center; border-radius: 999px; font-weight: 600; letter-spacing: 0.08em; }
+.mapa-ficha-acciones [data-ficha-mover] { width: 38px; padding: 0 0 2px; font-size: 1.2rem; }
+
+/* Dirección en la ficha completa de la iglesia */
+.info-direccion { display: flex; gap: 8px; align-items: flex-start; margin: 0.7rem 0 0; font-size: 0.92rem; line-height: 1.5; color: var(--texto-suave); }
+.info-direccion strong { color: var(--texto); font-weight: 600; }
+
+@media (max-width: 560px) {
+  .mapa-ficha { position: static; width: auto; margin-top: 12px; }
+}
+
+.mapa-nota { margin: 0.7rem 0 0; font: italic 300 0.95rem "Cormorant Garamond", Georgia, serif; color: var(--texto-suave); text-align: center; }
+
+/* Marco doble, como una ventana de cantera, y viñeta para que el mapa parezca grabado */
+.mapa-caja { position: sticky; top: 24px; }
+.mapa-caja::before { content: ""; position: absolute; inset: -9px; border: 1px solid rgba(233, 162, 59, 0.28); border-radius: 30px; pointer-events: none; z-index: 2; }
+.mapa { position: relative; }
+.mapa::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 90px rgba(5, 4, 12, 0.7); pointer-events: none; z-index: 500; }
+.mapa-cartela {
+  position: absolute; top: 14px; right: 14px; z-index: 600; margin: 0;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid rgba(233, 162, 59, 0.5);
+  border-radius: 999px;
+  background: rgba(11, 15, 26, 0.82);
+  backdrop-filter: blur(6px);
+  font: 600 0.62rem var(--titulos);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ocre-claro);
+  pointer-events: none;
+}
+
+/* Marcador con forma de arco de ventana colonial: cada iglesia es un vano con su número */
+.pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 30px;
+  height: 38px;
+  padding-top: 6px;
+  border-radius: 15px 15px 3px 3px;
+  border: 1.5px solid var(--ocre-claro);
+  background: linear-gradient(180deg, #1d2440, #0d1222);
+  color: var(--ocre-claro);
+  font: 600 0.8rem var(--titulos);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 0 0 2px rgba(233, 162, 59, 0.12);
+  transform-origin: 50% 100%;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+/* Pequeña punta bajo el arco, apuntando a la ubicación exacta */
+.pin::after {
+  content: ""; position: absolute; left: 50%; bottom: -6px;
+  width: 8px; height: 8px;
+  background: #0d1222;
+  border-right: 1.5px solid var(--ocre-claro);
+  border-bottom: 1.5px solid var(--ocre-claro);
+  transform: translateX(-50%) rotate(45deg);
+  transition: background 0.3s;
+}
+.pin:hover { transform: scale(1.1); }
+.pin.activo {
+  background: linear-gradient(180deg, #F6C877, #E9A23B);
+  color: #1a1206;
+  border-color: #fff3d6;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 4px rgba(233, 162, 59, 0.22), 0 0 22px rgba(233, 162, 59, 0.7), 0 8px 18px rgba(0, 0, 0, 0.5);
+}
+.pin.activo::after { background: #E9A23B; }
+.pin.activo:hover { transform: scale(1.25); }
+.leaflet-tooltip { font-family: var(--cuerpo); }
+/* "Modo noche" para el mapa: invierte los colores de OpenStreetMap y los tiñe de sepia */
+.mapa .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.82) contrast(0.92) saturate(0.55) sepia(0.3); }
+
+/* Controles y textos del mapa, con el mismo vidrio oscuro de la app */
+.mapa .leaflet-control-zoom { border: 1px solid var(--borde-vidrio) !important; border-radius: 12px !important; overflow: hidden; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important; }
+.mapa .leaflet-control-zoom a { background: rgba(20, 26, 46, 0.92) !important; color: var(--ocre) !important; border-bottom: 1px solid var(--borde-vidrio) !important; }
+.mapa .leaflet-control-zoom a:hover { background: rgba(233, 162, 59, 0.18) !important; }
+.mapa .leaflet-control-attribution { background: rgba(11, 15, 26, 0.75) !important; color: var(--texto-suave) !important; font-size: 0.65rem; }
+.mapa .leaflet-control-attribution a { color: var(--ocre) !important; }
+.mapa .leaflet-tooltip { padding: 0.45rem 0.8rem; border: 1px solid rgba(233, 162, 59, 0.6); border-radius: 12px; background: rgba(13, 18, 34, 0.94); color: var(--texto); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5); font: 600 0.7rem var(--titulos); letter-spacing: 0.05em; }
+.mapa .leaflet-tooltip::before { display: none; }
+
+/* Ruta: trazo ocre con borde oscuro y un flujo de puntos que indica el sentido del camino */
+.ruta-linea { filter: drop-shadow(0 0 6px rgba(233, 162, 59, 0.55)); }
+.ruta-flujo { animation: ruta-avance 1s linear infinite; }
+@keyframes ruta-avance { to { stroke-dashoffset: -16; } }
+@media (prefers-reduced-motion: reduce) { .ruta-flujo { animation: none; } }
+
+/* Tu ubicación: punto azul con pulso */
+.origen { display: block; width: 16px; height: 16px; margin: 3px; border-radius: 50%; background: #3b82f6; border: 3px solid #fff; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6); animation: origen-pulso 2s ease-out infinite; }
+@keyframes origen-pulso {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6); }
+  100% { box-shadow: 0 0 0 16px rgba(59, 130, 246, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .origen { animation: none; } }
+
+/* Apartados "Libros" y "Arte sacro" de cada iglesia */
+.apartados { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.7rem; margin-top: 1.8rem; padding-top: 1.5rem; border-top: 1px solid var(--borde-vidrio); }
+.apartados a { padding: 1rem; border: 1px solid var(--borde-vidrio); border-radius: 12px; background: var(--vidrio); font: 700 1.05rem var(--titulos); letter-spacing: 0.04em; text-align: center; text-decoration: none; color: var(--ocre); transition: background 0.2s, border-color 0.2s; }
+.apartados a:hover { border-color: var(--ocre); background: rgba(233, 162, 59, 0.16); }
+
+/* Vista completa de un apartado */
+.vista-apartado {
+  min-height: 100vh;
+  padding-top: calc(var(--nav) + 2rem);
+  overflow-x: clip;
+  background:
+    radial-gradient(ellipse 60% 26% at 50% 66%, rgba(233, 162, 59, 0.1), transparent 70%),
+    linear-gradient(180deg, #080b1e, #0d1230 55%, #0a0d22);
+}
+/* Estrellas y luna del fondo */
+.vista-apartado::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.75;
+  background-image:
+    radial-gradient(1px 1px at 7% 12%, #fff, transparent), radial-gradient(1px 1px at 18% 30%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 27% 8%, #fff, transparent), radial-gradient(1px 1px at 36% 22%, #fff, transparent),
+    radial-gradient(1px 1px at 61% 9%, #fff, transparent), radial-gradient(1.5px 1.5px at 72% 26%, #fff, transparent),
+    radial-gradient(1px 1px at 83% 7%, #fff, transparent), radial-gradient(1px 1px at 96% 32%, #fff, transparent),
+    radial-gradient(1px 1px at 4% 44%, #fff, transparent), radial-gradient(1px 1px at 94% 56%, #fff, transparent);
+}
+.vista-apartado::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--nav) + 3rem);
+  right: clamp(24px, 9vw, 150px);
+  width: clamp(38px, 5vw, 68px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 40%, #fff6dc, #f1dca4 70%, #d9bd7c);
+  box-shadow: 0 0 34px rgba(246, 225, 170, 0.5);
+  pointer-events: none;
+}
+.vista-apartado > * { position: relative; z-index: 1; }
+.vista-volver { display: block; width: fit-content; cursor: pointer; font: inherit; background: none; }
+
+.vista-encabezado { margin-top: 1rem; text-align: center; }
+.vista-apartado h2 { margin: 0; font: 600 clamp(2.6rem, 5vw, 4rem)/1.1 "Cormorant Garamond", Georgia, serif; }
+.vista-apartado h2 em { font-weight: 300; color: var(--ocre-claro); }
+.vista-apartado h2:focus { outline: none; }
+.vista-encabezado p { margin: 0.5rem 0 0; color: var(--texto-suave); font-size: 1.05rem; font-weight: 300; }
+/* Línea con estrella de cuatro puntas */
+.vista-adorno {
+  position: relative;
+  display: block;
+  width: min(420px, 80%);
+  height: 18px;
+  margin: 1rem auto 0;
+  background: linear-gradient(90deg, transparent, rgba(246, 200, 119, 0.6) 44%, transparent 44%, transparent 56%, rgba(246, 200, 119, 0.6) 56%, transparent) center / 100% 1px no-repeat;
+}
+.vista-adorno::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  background: var(--ocre-claro);
+  clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%);
+}
+.vista-contenido { margin-top: 2.2rem; }
+
+/* Carrusel 3D de libros y piezas de arte sacro */
+.cover-escena {
+  --ancho: clamp(250px, 25vw, 440px);
+  position: relative;
+  height: var(--ancho);
+  perspective: 1400px;
+  touch-action: pan-y;
+}
+.cover {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--ancho);
+  height: var(--ancho);
+  margin-left: calc(var(--ancho) / -2);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(246, 200, 119, 0.35);
+  border-radius: 12px;
+  background: linear-gradient(160deg, #1d2440, #0d1222);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s, filter 0.4s, border-color 0.4s;
+  filter: brightness(0.62);
+}
+.cover:hover { filter: brightness(0.82); }
+.cover.activa { border-color: var(--ocre-claro); filter: none; cursor: default; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 34px rgba(233, 162, 59, 0.14); }
+.cover.oculta { opacity: 0; visibility: hidden; pointer-events: none; }
+.cover:focus-visible { outline: 2px solid var(--ocre-claro); outline-offset: 3px; }
+.cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 38%, rgba(6, 7, 18, 0.94) 86%); }
+.cover-texto { position: absolute; left: 7%; right: 7%; bottom: 7%; z-index: 1; display: grid; gap: 0.3rem; }
+.cover-texto strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font: 600 clamp(1.3rem, 2vw, 1.85rem)/1.12 "Cormorant Garamond", Georgia, serif;
+}
+.cover-texto em { font: 300 italic clamp(1.05rem, 1.5vw, 1.3rem)/1.2 "Cormorant Garamond", Georgia, serif; color: var(--ocre-claro); }
+
+.cover-controles { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; color: var(--texto-suave); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.cover-controles button { width: 44px; height: 44px; padding: 0 0 3px; border: 1px solid rgba(246, 200, 119, 0.4); border-radius: 50%; background: rgba(13, 18, 34, 0.7); color: var(--ocre-claro); font-size: 1.5rem; line-height: 1; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+.cover-controles button:hover { border-color: var(--ocre-claro); background: rgba(233, 162, 59, 0.16); }
+
+.cover-panel { max-width: 680px; margin: 1.4rem auto 0; text-align: center; line-height: 1.6; color: var(--texto-suave); }
+.cover-panel h3 { margin: 0; font: 600 clamp(1.5rem, 2.4vw, 2rem)/1.15 "Cormorant Garamond", Georgia, serif; color: var(--texto); }
+.cover-panel p { margin: 0.5rem 0 0; }
+.cover-panel .cover-grupo { margin-top: 0.15rem; font: 300 italic 1.2rem "Cormorant Garamond", Georgia, serif; color: var(--ocre-claro); }
+.cover-panel .cover-nota { font-size: 0.88rem; }
+.cover-panel .cover-leer { margin-top: 0.9rem; padding: 0.7rem 1.2rem; font: inherit; font-size: 0.9rem; color: var(--ocre-claro); }
+
+/* Libros: la portada digitalizada se ve desde arriba, donde está el título */
+.cover.es-libro img { object-position: top; background: #efe9dc; }
+/* Portada ilustrada para los libros sin imagen de su portada real */
+.cover-ilustrada {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 14%;
+  border: 1px solid rgba(246, 200, 119, 0.5);
+  outline: 1px solid rgba(246, 200, 119, 0.35);
+  outline-offset: -12px;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.08), transparent 60%),
+    linear-gradient(160deg, #5a2a22, #3a1814 60%, #2a100d);
+  text-align: center;
+}
+.cover-ilustrada span { font-size: 1.6rem; color: var(--ocre-claro); }
+.cover-ilustrada strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  font: 600 clamp(1.15rem, 1.8vw, 1.6rem)/1.15 "Cormorant Garamond", Georgia, serif;
+  color: #f6e7c4;
+}
+.cover-ilustrada em { font: 300 italic 1.05rem "Cormorant Garamond", Georgia, serif; color: var(--ocre-claro); }
+
+/* Libro abierto dentro de la página */
+.lector { position: relative; left: 50%; width: min(1040px, calc(100vw - 32px)); margin-top: 1.2rem; transform: translateX(-50%); }
+.lector iframe { display: block; width: 100%; height: min(82vh, 820px); border: 1px solid rgba(246, 200, 119, 0.4); border-radius: 12px; background: #fff; }
+.lector-acciones { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-top: 0.8rem; }
+.lector-acciones a { color: var(--ocre-claro); }
+.lector > small { display: block; margin-top: 0.6rem; text-align: center; }
+.cover.activa { cursor: zoom-in; }
+.cover-panel .cover-leer + .cover-leer { margin-left: 0.5rem; }
+
+/* Ventana con la imagen grande y la historia de la pieza */
+.pieza-detalle {
+  width: min(1120px, calc(100% - 32px));
+  max-height: calc(100vh - 40px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(246, 200, 119, 0.45);
+  border-radius: 18px;
+  background: linear-gradient(160deg, #111737, #0a0d22);
+  color: var(--texto);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.pieza-detalle[open] { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
+.pieza-detalle::backdrop { background: rgba(4, 6, 16, 0.82); backdrop-filter: blur(4px); }
+.detalle-imagen { position: relative; display: grid; place-items: center; min-height: 0; margin: 0; background: #05060f; }
+.detalle-imagen img { width: 100%; height: 100%; max-height: calc(100vh - 42px); object-fit: contain; display: block; }
+.detalle-imagen.es-libro img { background: #efe9dc; }
+.detalle-imagen .cover-ilustrada { position: relative; width: min(100%, 420px); aspect-ratio: 3 / 4; border-radius: 12px; }
+.detalle-texto { display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem; max-height: calc(100vh - 42px); overflow-y: auto; padding: clamp(24px, 3.5vw, 44px); line-height: 1.65; color: var(--texto-suave); }
+.detalle-texto h2 { margin: 0.8rem 0 0; font: 600 clamp(1.8rem, 3vw, 2.6rem)/1.1 "Cormorant Garamond", Georgia, serif; color: var(--texto); }
+.detalle-texto .cover-grupo { margin: 0.2rem 0 0.8rem; font: 300 italic 1.25rem "Cormorant Garamond", Georgia, serif; color: var(--ocre-claro); }
+.detalle-texto p { margin: 0 0 0.8rem; }
+.detalle-historia { font-size: 1.02rem; color: var(--texto); }
+.detalle-texto h3 { margin: 0.9rem 0 0.25rem; font: 700 0.72rem var(--cuerpo); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ocre-claro); }
+.detalle-texto .cover-nota { font-size: 0.9rem; }
+.detalle-texto small { display: block; margin-top: 0.6rem; font-size: 0.78rem; }
+.detalle-texto small a { color: inherit; }
+.detalle-texto .cover-controles { margin-top: auto; padding-top: 1.4rem; align-self: stretch; }
+.detalle-cerrar { position: absolute; top: 12px; right: 12px; z-index: 2; width: 42px; height: 42px; padding: 0 0 3px; border: 1px solid rgba(246, 200, 119, 0.5); border-radius: 50%; background: rgba(10, 13, 34, 0.85); color: var(--ocre-claro); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.detalle-cerrar:hover { background: rgba(233, 162, 59, 0.2); }
+@media (max-width: 760px) {
+  .pieza-detalle[open] { grid-template-columns: 1fr; overflow-y: auto; }
+  .detalle-imagen img { height: auto; max-height: 55vh; }
+  .detalle-texto { max-height: none; overflow: visible; }
+}
+.lector-acciones .boton-contorno { padding: 0.6rem 1.1rem; font: inherit; font-size: 0.85rem; }
+.cover-panel small { display: block; margin-top: 0.7rem; font-size: 0.74rem; }
+.cover-panel small a { color: inherit; }
+
+.vista-otras { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; margin-top: 1.4rem; }
+.vista-otra { display: flex; gap: 0.35rem; width: fit-content; }
+
+/* Eventos y misas */
+.eventos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(16px, 2.5vw, 28px); max-width: 1080px; margin: 0 auto; align-items: start; }
+.eventos-bloque { padding: clamp(20px, 2.6vw, 30px); border: 1px solid rgba(246, 200, 119, 0.28); border-radius: 16px; background: rgba(11, 15, 34, 0.72); box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35); }
+.eventos-bloque h3 { margin: 0 0 1rem; font: 600 1.7rem/1.1 "Cormorant Garamond", Georgia, serif; }
+.misas { display: grid; gap: 0.2rem; margin: 0; }
+.misas div { display: grid; grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr); gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--borde-vidrio); }
+.misas div:last-child { border-bottom: 0; }
+.misas dt { font-weight: 600; color: var(--ocre-claro); }
+.misas dd { margin: 0; line-height: 1.6; }
+/* Horas en columnas: inicio a la derecha, guion al centro, término a la izquierda */
+.misas { --col-hora: 6.2rem; --col-guion: 1.6rem; }
+.misas ul { display: grid; gap: 0.15rem; margin: 0; padding: 0; list-style: none; }
+.misas li {
+  display: grid;
+  grid-template-columns: var(--col-hora) var(--col-guion) var(--col-hora);
+  align-items: center;
+  min-height: 2.1rem;
+  font-variant-numeric: tabular-nums;
+}
+.misa-inicio { text-align: right; }
+.misa-guion { text-align: center; color: var(--texto-suave); }
+.misa-fin { color: var(--texto-suave); }
+/* La nota va en su propio renglón, debajo de la hora de término */
+.misa-nota {
+  grid-column: 3 / -1;
+  justify-self: start;
+  margin: -0.15rem 0 0.35rem;
+  padding: 0.12rem 0.6rem;
+  white-space: nowrap;
+  border: 1px solid rgba(246, 200, 119, 0.35);
+  border-radius: 999px;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--ocre-claro);
+}
+/* Encabezado de las columnas, alineado con las horas */
+.misas-leyenda {
+  display: grid;
+  /* Mismas columnas que una fila de horarios: días, separación, inicio, guion, término */
+  grid-template-columns: minmax(0, 9.5rem) 1rem 6.2rem 1.6rem 6.2rem;
+  margin: 0 0 0.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+.misas-leyenda span:first-child { grid-column: 3; text-align: right; }
+.misas-leyenda span:nth-child(2) { grid-column: 4; }
+.misas-leyenda span:last-child { grid-column: 5; white-space: nowrap; }
+.eventos-nota { margin: 0.9rem 0 0; font-size: 0.88rem; line-height: 1.6; color: var(--texto-suave); }
+.eventos-aviso { margin: 1rem 0 0; padding: 0.8rem 1rem; border-radius: 10px; background: rgba(233, 162, 59, 0.1); font-size: 0.85rem; line-height: 1.55; color: var(--texto-suave); }
+.fiesta { padding: 0.9rem 0 0.9rem 1rem; border-left: 2px solid var(--ocre-claro); }
+.fiesta + .fiesta { margin-top: 0.6rem; }
+.fiesta-fecha { margin: 0; font: 300 italic 1.15rem "Cormorant Garamond", Georgia, serif; color: var(--ocre-claro); }
+.fiesta h4 { margin: 0.1rem 0 0.35rem; font: 600 1.3rem/1.2 "Cormorant Garamond", Georgia, serif; color: var(--texto); }
+.fiesta p:last-child { margin: 0; line-height: 1.6; color: var(--texto-suave); }
+@media (max-width: 560px) {
+  .misas div { grid-template-columns: 1fr; gap: 0.2rem; }
+  .misas-leyenda { grid-template-columns: 6.2rem 1.6rem 6.2rem; column-gap: 0; }
+  .misas-leyenda span:first-child { grid-column: 1; }
+  .misas-leyenda span:nth-child(2) { grid-column: 2; }
+  .misas-leyenda span:last-child { grid-column: 3; }
+}
+
+.apartado-nota { max-width: 680px; margin: 1.4rem auto 0; padding: 0.9rem 1.1rem; border-radius: 12px; background: rgba(233, 162, 59, 0.1); line-height: 1.6; text-align: center; color: var(--texto-suave); }
+
+.arte-perdida { padding: 0.08rem 0.45rem; border: 1px solid rgba(240, 160, 143, 0.6); border-radius: 999px; font: 400 0.72rem var(--cuerpo); color: #F0A08F; vertical-align: middle; }
+.arte-vacias { max-width: 680px; margin: 1.4rem auto 0; color: var(--texto-suave); }
+.arte-vacias summary { cursor: pointer; font-size: 0.92rem; text-align: center; }
+.arte-vacias summary:hover { color: var(--ocre); }
+.arte-vacias ul { display: grid; gap: 0.45rem; margin: 0.7rem 0 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.5; }
+.arte-vacias strong { font-weight: 600; color: var(--texto); }
+
+.apartados-fuentes { margin: 1.4rem auto 0; max-width: 680px; font-size: 0.8rem; line-height: 1.6; text-align: center; color: var(--texto-suave); }
+.apartados-fuentes a { color: var(--ocre); }
+
+@media (max-width: 560px) {
+  .cover-escena { --ancho: min(70vw, 300px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover { transition: none; }
+}

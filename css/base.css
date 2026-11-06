@@ -1,0 +1,34 @@
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+:root {
+  --ocre: #E9A23B;
+  --ocre-claro: #F6C877;
+  --noche-1: #070d22;
+  --noche-2: #13204a;
+  --noche-3: #2a2f5e;
+  --horizonte: #c8763f;
+  --plaza: #100d12;
+  --texto: #f3ecdf;
+  --texto-suave: rgba(243, 236, 223, 0.68);
+  --vidrio: rgba(255, 255, 255, 0.07);
+  --borde-vidrio: rgba(255, 255, 255, 0.16);
+  --titulos: "Cinzel", Georgia, serif;
+  --cuerpo: "Figtree", "Segoe UI", sans-serif;
+  --nav: 76px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--cuerpo);
+  color: var(--texto);
+  background: var(--noche-1);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ocre); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

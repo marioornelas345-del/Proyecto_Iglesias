@@ -1,0 +1,28 @@
+/* =========================================================
+   SECCIONES INFERIORES
+   ========================================================= */
+.seccion {
+  position: relative;
+  z-index: 1;
+  padding: 80px clamp(16px, 4vw, 56px);
+  background: var(--plaza);
+  border-top: 1px solid rgba(233, 162, 59, 0.15);
+}
+.seccion h2 { margin: 0 0 0.4rem; font-family: var(--titulos); font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.4rem); }
+.seccion h2 b { font-weight: 700; }
+.seccion > p { max-width: 60ch; color: var(--texto-suave); line-height: 1.7; }
+.recorrido { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 2rem 0 0; padding: 0; list-style: none; counter-reset: paso; }
+.recorrido li, .barrio {
+  padding: 1.2rem 1.3rem;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 14px;
+  background: var(--vidrio);
+}
+.recorrido li { counter-increment: paso; }
+.recorrido li::before { content: "0" counter(paso); display: block; font-family: var(--titulos); color: var(--ocre); font-size: 1.4rem; }
+.recorrido strong, .barrio strong { display: block; margin: 0.3rem 0; font-family: var(--titulos); }
+.recorrido span, .barrio span { font-size: 0.88rem; color: var(--texto-suave); }
+.barrios { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 2rem; }
+.barrio { cursor: pointer; text-align: left; transition: border-color 0.2s; }
+.barrio:hover { border-color: var(--ocre); }
+.pie { padding: 28px clamp(16px, 4vw, 56px); background: #0a080c; color: var(--texto-suave); font-size: 0.8rem; position: relative; z-index: 1; }

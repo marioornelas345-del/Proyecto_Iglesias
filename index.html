@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Templos de Mérida</title>
+<meta name="description" content="Las iglesias históricas del Centro de Mérida, Yucatán, de la Catedral de San Ildefonso a la Parroquia de San Cristóbal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@600&family=Figtree:wght@300;400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- PORTADA "Mérida Sacra": tipografías -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Work+Sans:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- Leaflet 1.9.4 (mapas con calles de Esri), copia local en vendor/ -->
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<script src="vendor/leaflet/leaflet.js"></script>
+
+<!-- Estilos, un archivo por sección -->
+<link rel="stylesheet" href="css/portada.css?v=3">
+<link rel="stylesheet" href="css/base.css?v=3">
+<link rel="stylesheet" href="css/intro.css?v=3">
+<link rel="stylesheet" href="css/login.css?v=4">
+<link rel="stylesheet" href="css/escena.css?v=3">
+<link rel="stylesheet" href="css/navbar.css?v=3">
+<link rel="stylesheet" href="css/carrusel.css?v=4">
+<link rel="stylesheet" href="css/secciones.css?v=3">
+<link rel="stylesheet" href="css/todas.css?v=16">
+<link rel="stylesheet" href="css/perfil.css?v=4">
+<link rel="stylesheet" href="css/responsive.css?v=4">
+<link rel="stylesheet" href="css/gestion.css?v=2">
+</head>
+<body>
+
+<!-- Definiciones SVG compartidas por todas las fachadas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="piedra" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9b1a6"/>
+      <stop offset="0.6" stop-color="#8f8578"/>
+      <stop offset="1" stop-color="#5e544c"/>
+    </linearGradient>
+    <linearGradient id="piedra-sombra" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7f766b"/>
+      <stop offset="1" stop-color="#463e39"/>
+    </linearGradient>
+    <linearGradient id="luz" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE7A8"/>
+      <stop offset="1" stop-color="#F2A93B"/>
+    </linearGradient>
+    <filter id="brillo" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<!-- 1. Animación de entrada (se muestra al iniciar sesión) -->
+<div class="intro" id="intro" aria-hidden="true" hidden>
+  <svg viewBox="0 0 60 72" fill="none" stroke="#E9A23B" stroke-width="2" stroke-linejoin="round">
+    <path d="M30 2v8M26 6h8"/>
+    <path d="M6 70V36h8V24l8-8h16l8 8v12h8v34z"/>
+    <path d="M24 34v-6a6 6 0 0 1 12 0v6"/>
+    <path d="M27 33c0-4 6-4 6 0l1 2h-8z"/>
+    <path d="M22 70V56a8 8 0 0 1 16 0v14"/>
+  </svg>
+  <p>TEMPLOS · MÉRIDA · YUCATÁN</p>
+  <p class="bienvenida" id="bienvenida"></p>
+</div>
+
+<!-- 2. Escena nocturna de fondo -->
+<div class="escena" aria-hidden="true">
+  <div class="cielo" id="cielo"></div>
+  <div class="luna"></div>
+  <div class="plaza"></div>
+</div>
+
+<!-- 3. Inicio de sesión / Crear cuenta -->
+<section class="auth" id="auth" aria-labelledby="auth-titulo">
+
+  <!-- Fondo: manos sosteniendo una Biblia y pasando las hojas (video de Thirdman, Pexels) -->
+  <div class="auth-fondo" aria-hidden="true">
+    <video class="auth-video" id="auth-video" src="video/biblia-manos.mp4" poster="video/biblia-manos.jpg" autoplay muted loop playsinline preload="auto"></video>
+  </div>
+
+  <div class="auth-panel">
+    <div class="auth-caja">
+      <div class="auth-emblema" aria-hidden="true">
+        <!-- Libro abierto con una cruz -->
+        <svg viewBox="0 0 48 48">
+          <path d="M24 4v12M19 8.5h10"/>
+          <path d="M24 22c-4-3.5-10-4.5-18-4v20c8-.5 14 .5 18 4 4-3.5 10-4.5 18-4V18c-8-.5-14 .5-18 4zM24 22v20"/>
+        </svg>
+      </div>
+      <p class="auth-logo">IGLESIAS DE MÉRIDA</p>
+      <p class="auth-lema">Yucatán, México</p>
+      <blockquote class="auth-versiculo">“El que comenzó en vosotros la buena obra, la perfeccionará hasta el día de Jesucristo.” — <cite>Filipenses 1:6</cite></blockquote>
+
+      <div class="auth-oculto" id="auth-encabezado">
+        <h1 id="auth-titulo">Iniciar sesión</h1>
+        <p id="auth-sub">Accede para explorar las iglesias de Mérida.</p>
+      </div>
+
+      <!-- Pestañas -->
+      <div class="a-pestanas" id="auth-pestanas" role="tablist" aria-label="Tipo de acceso">
+        <button class="a-pestana activa" id="tab-login" type="button" role="tab" aria-selected="true">Iniciar sesión</button>
+        <button class="a-pestana" id="tab-registro" type="button" role="tab" aria-selected="false">Crear cuenta</button>
+      </div>
+
+      <form class="a-form" id="form-auth" novalidate>
+        <div class="a-campo a-campo-extra" id="campo-nombre" hidden>
+          <label class="auth-oculto" for="nombre">Nombre completo</label>
+          <div class="a-entrada">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5z"/></svg>
+            <input id="nombre" type="text" autocomplete="name" placeholder="Nombre completo">
+          </div>
+          <p class="a-error" id="error-nombre" aria-live="polite"></p>
+        </div>
+        <div class="a-campo">
+          <label class="auth-oculto" for="correo">Correo electrónico</label>
+          <div class="a-entrada">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v.6l-10 6-10-6V6a1 1 0 0 1 1-1zm-1 3.9V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.9l-10 6z"/></svg>
+            <input id="correo" type="email" autocomplete="email" placeholder="Correo electrónico">
+          </div>
+          <p class="a-error" id="error-correo" aria-live="polite"></p>
+        </div>
+        <div class="a-campo">
+          <label class="auth-oculto" for="contrasena">Contraseña</label>
+          <div class="a-entrada a-con-boton">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 10V7A5 5 0 0 0 7 7v3H5v11h14V10zm-8 0V7a3 3 0 0 1 6 0v3z"/></svg>
+            <input id="contrasena" type="password" autocomplete="current-password" placeholder="Contraseña">
+            <button class="a-ver" id="btn-ver" type="button" aria-label="Mostrar contraseña">Ver</button>
+          </div>
+          <p class="a-error" id="error-contrasena" aria-live="polite"></p>
+        </div>
+        <div class="a-campo a-campo-extra" id="campo-confirmar" hidden>
+          <label class="auth-oculto" for="confirmar">Confirmar contraseña</label>
+          <div class="a-entrada">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 10V7A5 5 0 0 0 7 7v3H5v11h14V10zm-8 0V7a3 3 0 0 1 6 0v3z"/></svg>
+            <input id="confirmar" type="password" autocomplete="new-password" placeholder="Confirmar contraseña">
+          </div>
+          <p class="a-error" id="error-confirmar" aria-live="polite"></p>
+        </div>
+        <button class="a-enlace" id="btn-olvide" type="button">¿Olvidaste tu contraseña?</button>
+        <p class="a-mensaje" id="auth-mensaje" role="alert"></p>
+        <button class="a-btn a-btn-entrar" id="btn-enviar" type="submit">Iniciar sesión</button>
+      </form>
+
+<div class="a-separador" id="auth-separador"><span>o</span></div>
+
+      <button class="a-btn a-btn-google" id="btn-google" type="button">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continuar con Google
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Aplicación (oculta hasta iniciar sesión) -->
+<div id="app" hidden>
+
+<!-- Navbar -->
+<header class="nav">
+  <a class="logo" href="#inicio" aria-label="Templos de Mérida, inicio">
+    <svg viewBox="0 0 60 72" fill="none" stroke="#E9A23B" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+      <path d="M30 2v8M26 6h8"/>
+      <path d="M6 70V36h8V24l8-8h16l8 8v12h8v34z"/>
+      <path d="M24 34v-6a6 6 0 0 1 12 0v6"/>
+      <path d="M22 70V56a8 8 0 0 1 16 0v14"/>
+    </svg>
+    <span>TEMPLOS<small>MÉRIDA</small></span>
+  </a>
+
+  <ul class="enlaces">
+    <li><a href="#inicio" class="activo" aria-current="page">Iglesias</a></li>
+    <li><a href="#todas">Todas</a></li>
+    <li><a href="#recorrido">Recorrido</a></li>
+    <li><a href="#barrios">Barrios</a></li>
+    <li><a href="#acerca">Acerca de</a></li>
+    <li data-enlace-gestion hidden><a href="#gestion" data-enlace-gestion>Gestión</a></li>
+  </ul>
+
+  <div class="nav-derecha">
+    <span class="idioma">ES · MX</span>
+    <label class="sr" for="buscador">Buscar templo</label>
+    <input class="buscador" id="buscador" type="search" placeholder="Buscar templo…" autocomplete="off" tabindex="-1">
+    <button class="icono" id="btn-buscar" type="button" aria-label="Buscar" aria-controls="buscador" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    </button>
+    <button class="icono" id="btn-menu" type="button" aria-label="Menú" aria-controls="menu-panel" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+    </button>
+    <!-- Usuario que inició sesión -->
+    <div class="usuario">
+      <a class="usuario-perfil" href="#perfil" aria-label="Ver mi perfil" title="Mi perfil">
+        <img class="avatar" id="avatar-foto" alt="" hidden referrerpolicy="no-referrer">
+        <span class="avatar" id="avatar-inicial" aria-hidden="true"></span>
+        <span class="usuario-nombre" id="usuario-nombre"></span>
+      </a>
+      <button class="icono" id="btn-salir" type="button" aria-label="Cerrar sesión" title="Cerrar sesión">
+        <svg viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="menu-panel" id="menu-panel" aria-label="Menú">
+    <a href="#inicio">Iglesias</a>
+    <a href="#todas">Todas las iglesias</a>
+    <a href="#recorrido">Recorrido</a>
+    <a href="#barrios">Barrios</a>
+    <a href="#acerca">Acerca de</a>
+    <a href="#perfil">Mi perfil</a>
+    <a href="#gestion" data-enlace-gestion hidden>Gestión de la iglesia</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ===== PORTADA "MÉRIDA SACRA" (inicio) ===== -->
+  <section class="sacra" id="sacra" aria-labelledby="sacra-titulo">
+
+    <!-- Escena nocturna decorativa -->
+    <div class="sacra-escena" aria-hidden="true">
+      <!-- Silueta de laurel reutilizable -->
+      <svg width="0" height="0" style="position:absolute">
+        <symbol id="silueta-laurel" viewBox="0 0 200 400">
+          <path d="M90 400 L95 230 Q100 220 105 230 L110 400 Z" fill="currentColor"/>
+          <path d="M100 250 L70 175 M100 250 L132 172" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <g fill="currentColor">
+            <circle cx="100" cy="150" r="70"/><circle cx="55" cy="182" r="50"/>
+            <circle cx="146" cy="180" r="52"/><circle cx="74" cy="104" r="48"/>
+            <circle cx="130" cy="100" r="50"/><circle cx="100" cy="68" r="45"/>
+            <circle cx="38" cy="136" r="35"/><circle cx="166" cy="134" r="35"/>
+          </g>
+        </symbol>
+      </svg>
+      <div class="sacra-estrellas" id="sacra-estrellas"></div>
+      <div class="sacra-luna"></div>
+      <svg class="sacra-laurel izquierdo"><use href="#silueta-laurel"/></svg>
+      <svg class="sacra-laurel derecho"><use href="#silueta-laurel"/></svg>
+      <div class="sacra-plaza"></div>
+    </div>
+    <div class="sacra-vela" id="sacra-vela" aria-hidden="true"></div>
+
+    <!-- Contenido -->
+    <div class="sacra-contenido">
+      <p class="sacra-etiqueta sacra-revelar">Mérida, Yucatán</p>
+      <h1 class="sacra-titulo sacra-revelar" id="sacra-titulo">Cinco siglos de <em>fe</em> tallada en piedra</h1>
+      <p class="sacra-texto sacra-revelar">Desde la fundación de Mérida en 1542, sobre la antigua ciudad maya de T'Hó, sus templos han marcado la vida de la Ciudad Blanca. A la cabeza está la Catedral de San Ildefonso, una de las catedrales más antiguas del continente americano.</p>
+
+      <!-- Los números se calculan en portada.js con los datos de TEMPLOS -->
+      <dl class="sacra-contadores sacra-revelar">
+        <div><dt>Iglesias</dt><dd data-contador="iglesias">0</dd></div>
+        <div><dt>Desde</dt><dd data-contador="desde">0</dd></div>
+        <div><dt>Siglos</dt><dd data-contador="siglos">0</dd></div>
+      </dl>
+
+      <div class="sacra-botones sacra-revelar">
+        <a class="sacra-boton principal" href="#recorrido">Comenzar el recorrido →</a>
+        <a class="sacra-boton" href="#todas" aria-label="Explorar todas las iglesias">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          Explorar
+        </a>
+      </div>
+
+      <a class="sacra-desliza" href="#inicio" aria-label="Deslizar hacia las iglesias">
+        <span class="sacra-raton" aria-hidden="true"></span>
+        Desliza
+      </a>
+    </div>
+  </section>
+  <!-- ===== FIN PORTADA ===== -->
+
+  <!-- 4. Carrusel -->
+  <section class="portada" id="inicio" aria-roledescription="carrusel" aria-label="Templos del Centro de Mérida">
+    <div class="escenario" id="escenario" aria-live="off">
+      <div class="texto">
+        <span class="etiqueta anim" style="--i:0" id="barrio"></span>
+        <h2 class="titulo anim" style="--i:1" id="titulo"></h2>
+        <p class="subtitulo anim" style="--i:2" id="subtitulo"></p>
+        <p class="descripcion anim" style="--i:3" id="descripcion"></p>
+        <div class="anio anim" style="--i:4"><strong id="anio"></strong><small id="nota"></small></div>      </div>
+
+      <div class="fachada anim" style="--i:1" id="fachada"></div>
+
+      <aside class="ficha anim" style="--i:3" aria-labelledby="ficha-titulo">
+        <h2 id="ficha-titulo">FICHA DEL TEMPLO</h2>
+        <dl>
+          <div><dt>Construcción</dt><dd id="f-construccion"></dd></div>
+          <div><dt>Estilo</dt><dd id="f-estilo"></dd></div>
+          <div><dt>Siglo</dt><dd id="f-siglo"></dd></div>
+          <div><dt>Dato</dt><dd id="f-dato"></dd></div>
+        </dl>
+      </aside>
+    </div>
+
+    <!-- 5. Barra inferior -->
+    <div class="barra">
+      <div class="controles">
+        <button class="flecha" id="anterior" type="button" aria-label="Templo anterior">‹</button>
+        <span class="contador" id="contador"></span>
+        <button class="flecha siguiente" id="siguiente" type="button" aria-label="Templo siguiente">›</button>
+        <button class="flecha" id="pausa" type="button" aria-label="Pausar el carrusel">❚❚</button>
+      </div>
+      <ul class="miniaturas" id="miniaturas"></ul>
+      <div class="linea" aria-label="Línea de tiempo de 1561 a 1796">
+        <span>1561</span>
+        <div class="linea-pista" id="linea-pista">
+          <div class="linea-relleno" id="linea-relleno"></div>
+          <div class="linea-punto" id="linea-punto"></div>
+        </div>
+        <span>1796</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TODAS LAS IGLESIAS: tarjetas + información completa + mapa -->
+  <section class="seccion directorio" id="todas">
+    <h2>Todas las <b>iglesias</b></h2>
+    <p>Elige una iglesia para ver toda su información, su galería de fotos y dónde está en el mapa.</p>
+    <div class="tarjetas" id="tarjetas"></div>
+
+    <div class="detalle" id="detalle">
+      <article class="info" id="info" aria-live="polite"></article>
+      <div class="mapa-caja">
+        <div class="mapa-marco">
+          <div class="mapa" id="mapa" role="region" aria-label="Mapa con la ubicación de las iglesias"></div>
+          <p class="mapa-cartela" aria-hidden="true">Centro Histórico · Mérida</p>
+          <!-- Iglesia elegida: dirección y accesos (la llena todas.js) -->
+          <div class="mapa-ficha" id="mapa-ficha" aria-live="polite"></div>
+        </div>
+        <p class="mapa-nota">Toca un marcador o usa las flechas de la tarjeta para cambiar de iglesia.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" id="recorrido">
+    <h2>Un <b>recorrido</b> a pie</h2>
+    <p>Los diez templos están en el Centro Histórico y sus barrios, y se pueden recorrer caminando en un día. Este es el orden en que se construyeron.</p>
+    <ol class="recorrido" id="lista-recorrido"></ol>
+  </section>
+
+  <section class="seccion" id="barrios">
+    <h2>Los <b>barrios</b></h2>
+    <p>Cada barrio tradicional de Mérida creció alrededor de su iglesia y de su parque. Elige uno para ver su templo.</p>
+    <div class="barrios" id="lista-barrios"></div>
+  </section>
+
+  <section class="seccion" id="acerca">
+    <h2>Acerca <b>de</b></h2>
+    <p>"Templos de Mérida" es una página sobre el patrimonio religioso del Centro de Mérida, Yucatán. Las fachadas son ilustraciones simplificadas, no planos arquitectónicos. Tipografías Cinzel, Cormorant Garamond, Figtree, Source Sans 3 y Work Sans de Google Fonts. Video del inicio de sesión: <a href="https://www.pexels.com/video/man-turning-the-pages-of-a-scripture-8469023/" target="_blank" rel="noopener">Thirdman en Pexels</a>.</p>
+  </section>
+</main>
+
+<!-- Vista completa de "Libros", "Arte sacro" o "Eventos y misas" (la llena vistas/apartados.js) -->
+<section class="seccion vista-apartado" id="vista-apartado" aria-labelledby="vista-titulo" hidden></section>
+
+<!-- Imagen grande e historia de una pieza o libro (la llena vistas/apartados.js) -->
+<dialog class="pieza-detalle" id="pieza-detalle" aria-labelledby="pieza-titulo"></dialog>
+
+<!-- Confirmación para eliminar la cuenta (vistas/perfil.js) -->
+<dialog class="confirmar" id="confirmar-eliminar" aria-labelledby="confirmar-titulo" aria-describedby="confirmar-texto">
+  <form id="form-eliminar" novalidate>
+    <h2 id="confirmar-titulo">¿Eliminar tu cuenta?</h2>
+    <p id="confirmar-texto">Se borrarán tu cuenta, tu foto, tus datos y las iglesias que marcaste como visitadas. <strong>No se puede deshacer.</strong></p>
+    <label class="perfil-campo" id="eliminar-campo">Escribe tu contraseña para confirmar
+      <input id="eliminar-contrasena" type="password" autocomplete="current-password">
+    </label>
+    <p class="perfil-mensaje" id="eliminar-mensaje" aria-live="polite"></p>
+    <div class="confirmar-botones">
+      <button class="boton-contorno" id="eliminar-cancelar" type="button">Cancelar</button>
+      <button class="boton boton-peligro" id="eliminar-confirmar" type="submit">Eliminar cuenta</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Perfil del usuario (lo llena vistas/perfil.js) -->
+<section class="seccion vista-apartado" id="vista-perfil" aria-labelledby="perfil-titulo" hidden>
+  <button class="boton-contorno vista-volver" id="perfil-volver" type="button">‹ Volver</button>
+  <header class="vista-encabezado">
+    <h2 id="perfil-titulo" tabindex="-1">Mi <em>perfil</em></h2>
+    <span class="vista-adorno" aria-hidden="true"></span>
+  </header>
+
+  <div class="perfil">
+    <aside class="perfil-tarjeta">
+      <img class="perfil-avatar" id="perfil-foto" alt="Tu foto de perfil" hidden referrerpolicy="no-referrer">
+      <span class="perfil-avatar" id="perfil-inicial" aria-hidden="true"></span>
+      <h3 id="perfil-nombre-tarjeta"></h3>
+      <p class="perfil-correo" id="perfil-correo"></p>
+      <div class="perfil-foto-botones">
+        <button class="boton-contorno" id="perfil-cambiar-foto" type="button">Cambiar foto</button>
+        <button class="boton-contorno" id="perfil-quitar-foto" type="button" hidden>Quitar foto</button>
+      </div>
+      <input id="perfil-archivo" type="file" accept="image/*" aria-label="Elegir foto de perfil" hidden>
+      <p class="perfil-mensaje" id="perfil-mensaje-foto" aria-live="polite"></p>
+      <dl>
+        <div id="perfil-miembro-fila"><dt>Miembro desde</dt><dd id="perfil-miembro"></dd></div>
+        <div><dt>Iglesia favorita</dt><dd id="perfil-favorita"></dd></div>
+      </dl>
+      <button class="boton-contorno" id="perfil-salir" type="button">Cerrar sesión</button>
+      <button class="perfil-eliminar" id="perfil-eliminar" type="button">Eliminar mi cuenta</button>
+    </aside>
+
+    <div class="perfil-secciones">
+      <section class="perfil-bloque" aria-labelledby="perfil-datos-titulo">
+        <h3 id="perfil-datos-titulo">Mis datos</h3>
+        <form class="perfil-form" id="form-perfil" novalidate>
+          <label class="perfil-campo">Nombre completo
+            <input id="perfil-nombre" type="text" autocomplete="name" maxlength="80">
+          </label>
+          <label class="perfil-campo">Libros leídos
+            <input id="perfil-libros" type="number" inputmode="numeric" min="0" max="9999" step="1" autocomplete="off">
+          </label>
+          <label class="perfil-campo">Ciudad
+            <input id="perfil-ciudad" type="text" autocomplete="address-level2" maxlength="80">
+          </label>
+          <label class="perfil-campo">Iglesias visitadas
+            <input id="perfil-visitadas-campo" type="text" readonly title="Se cuenta sola con las iglesias que marcas abajo">
+          </label>
+          <label class="perfil-campo ancho">Iglesia favorita
+            <select id="perfil-iglesia"><option value="">Sin elegir</option></select>
+          </label>
+          <label class="perfil-campo ancho">Sobre mí
+            <textarea id="perfil-sobre" maxlength="500"></textarea>
+          </label>
+          <div class="perfil-acciones">
+            <button class="boton" type="submit">GUARDAR CAMBIOS</button>
+            <p class="perfil-mensaje" id="perfil-mensaje" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+
+      <section class="perfil-bloque" aria-labelledby="perfil-visitadas-titulo">
+        <h3 id="perfil-visitadas-titulo">Iglesias visitadas: <span id="perfil-conteo"></span></h3>
+        <p class="perfil-ayuda">Toca una iglesia para marcarla como visitada.</p>
+        <div class="perfil-progreso" aria-hidden="true"><span id="perfil-barra"></span></div>
+        <div class="perfil-templos" id="perfil-templos"></div>
+      </section>
+    </div>
+  </div>
+  <p class="perfil-aviso">Tu perfil y tus iglesias visitadas se sincronizan con tu cuenta.</p>
+</section>
+
+<!-- Gestión de la iglesia: miembros, asistencia, eventos, ministerios, donaciones,
+     anuncios, panel, reportes y configuración (la llenan vistas/gestion.js y controladores/gestion.js) -->
+<section class="seccion vista-apartado vista-gestion" id="vista-gestion" aria-labelledby="gestion-titulo" hidden>
+  <button class="boton-contorno vista-volver" id="gestion-volver" type="button">‹ Volver</button>
+  <header class="vista-encabezado">
+    <h2 id="gestion-titulo" tabindex="-1">Gestión de la <em>iglesia</em></h2>
+    <p id="gestion-sub"></p>
+    <span class="vista-adorno" aria-hidden="true"></span>
+  </header>
+  <div class="g-cabecera">
+    <nav class="g-modulos" id="gestion-modulos" aria-label="Módulos de gestión"></nav>
+    <label class="g-iglesia" id="gestion-iglesia-campo" hidden>Iglesia
+      <select id="gestion-iglesia"></select>
+    </label>
+  </div>
+  <p class="g-aviso" id="gestion-aviso" role="status" aria-live="polite"></p>
+  <div class="g-contenido" id="gestion-contenido"></div>
+</section>
+
+<footer class="pie">Templos de Mérida · Mérida, Yucatán, México</footer>
+</div><!-- fin #app -->
+
+<!-- Formularios de la gestión (crear / editar) -->
+<dialog class="g-dialogo" id="gestion-dialogo" aria-labelledby="gestion-dialogo-titulo"></dialog>
+
+<!-- JavaScript en MVC (el orden importa: modelo → vistas → controladores → arranque) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/util.js?v=1"></script>
+<!-- Modelo: datos y reglas, sin tocar la página -->
+<script src="js/modelo/estado.js?v=1"></script>
+<script src="js/modelo/datos.js?v=7"></script>
+<script src="js/modelo/patrimonio.js?v=15"></script>
+<script src="js/modelo/misas.js?v=3"></script>
+<script src="js/modelo/fotos.js?v=7"></script>
+<script src="js/modelo/almacen.js?v=1"></script>
+<script src="js/modelo/supabase.js?v=1"></script>
+<script src="js/modelo/cuentas.js?v=2"></script>
+<script src="js/modelo/perfiles.js?v=2"></script>
+<script src="js/modelo/piezas.js?v=3"></script>
+<script src="js/modelo/rutas.js?v=1"></script>
+<script src="js/modelo/gestion.js?v=1"></script>
+<script src="js/modelo/reportes.js?v=1"></script>
+<!-- Vistas: solo dibujan lo que reciben -->
+<script src="js/vistas/fachadas.js?v=5"></script>
+<script src="js/vistas/carrusel.js?v=1"></script>
+<script src="js/vistas/escena.js?v=1"></script>
+<script src="js/vistas/iglesias.js?v=2"></script>
+<script src="js/vistas/mapa.js?v=2"></script>
+<script src="js/vistas/apartados.js?v=5"></script>
+<script src="js/vistas/login.js?v=2"></script>
+<script src="js/vistas/perfil.js?v=2"></script>
+<script src="js/vistas/gestion.js?v=2"></script>
+<script src="js/vistas/exportar.js?v=1"></script>
+<!-- Controladores: reciben los clics, cambian el modelo y piden a las vistas que dibujen -->
+<script src="js/controladores/carrusel.js?v=1"></script>
+<script src="js/controladores/iglesias.js?v=1"></script>
+<script src="js/controladores/apartados.js?v=1"></script>
+<script src="js/controladores/router.js?v=2"></script>
+<script src="js/controladores/auth.js?v=3"></script>
+<script src="js/controladores/perfil.js?v=2"></script>
+<script src="js/controladores/navegacion.js?v=1"></script>
+<script src="js/controladores/gestion.js?v=1"></script>
+<script src="js/main.js?v=6"></script>
+<script src="js/vistas/portada.js?v=4"></script>
+</body>
+</html>

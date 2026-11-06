@@ -1,0 +1,57 @@
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 760px) {
+  .tarjetas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .detalle { grid-template-columns: 1fr; }
+  .mapa-caja { position: relative; top: 0; }
+  .mapa { height: 380px; min-height: 0; }
+}
+@media (max-width: 560px) {
+  .tarjetas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+  .enlaces { gap: 1.3rem; }
+  .barra { grid-template-columns: auto minmax(0, 1fr); }
+  .linea { grid-column: 1 / -1; }
+}
+
+@media (max-width: 900px) {
+  .enlaces, .idioma { display: none; }
+  .nav { gap: 1rem; justify-content: space-between; }
+  .buscador.abierto { width: 130px; }
+
+  /* Orden en celular: fachada, texto, ficha */
+  .escenario { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 0.5rem; }
+  .fachada { order: 1; max-width: 420px; width: 100%; justify-self: center; }
+  .fachada svg { max-height: 42vh; }
+  .foto-marco { width: min(100%, calc(46vh * 0.8)); }
+  .texto { order: 2; }
+  .ficha { order: 3; }
+  .descripcion { max-width: none; }
+
+  .barra { grid-template-columns: minmax(0, 1fr); }
+  .controles { justify-content: center; }
+  /* Miniaturas deslizables horizontalmente */
+  .miniaturas { overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.4rem; scrollbar-width: none; }
+  .miniaturas::-webkit-scrollbar { display: none; }
+  .miniaturas li { flex: 0 0 104px; scroll-snap-align: center; }
+  .luna { width: 52px; height: 52px; top: 9%; }
+  .plaza { height: 14%; }
+}
+
+/* Respeta a quien prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .intro svg * { stroke-dashoffset: 0; }
+  .intro p { opacity: 1; }
+  .llegando .escena, .llegando #app { animation: none !important; }
+}

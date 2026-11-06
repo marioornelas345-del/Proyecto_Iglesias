@@ -1,0 +1,222 @@
+/* =========================================================
+   GESTIÓN DE LA IGLESIA (panel, miembros, eventos, etc.)
+   Usa los colores de base.css (--ocre, --texto, --vidrio…)
+   ========================================================= */
+.vista-gestion, .g-dialogo { --g-ok: #9BD6B4; --g-alerta: #F0A08F; --g-tarjeta: rgba(11, 15, 34, 0.72); --g-borde: rgba(246, 200, 119, 0.28); }
+.g-cabecera { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 0.8rem; max-width: 1200px; margin: 1.8rem auto 0; }
+.g-modulos { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.g-modulo {
+  padding: 0.5rem 0.9rem; border: 1px solid var(--borde-vidrio); border-radius: 999px;
+  color: var(--texto-suave); font-size: 0.88rem; text-decoration: none; transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.g-modulo:hover { border-color: var(--ocre-claro); color: var(--texto); }
+.g-modulo.activo { border-color: var(--ocre); background: var(--ocre); color: #1a1206; font-weight: 600; }
+.g-modulo:focus-visible { outline: 2px solid var(--ocre-claro); outline-offset: 2px; }
+.g-iglesia { display: grid; gap: 0.25rem; font-size: 0.8rem; color: var(--texto-suave); }
+.g-iglesia select, .g-campo input, .g-campo select, .g-campo textarea {
+  width: 100%; min-height: 42px; padding: 0.55rem 0.75rem; border: 1px solid var(--borde-vidrio); border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05); color: var(--texto); color-scheme: dark; font: 0.95rem var(--cuerpo);
+}
+.g-iglesia select option, .g-campo select option { background: #0d1222; }
+.g-campo input:focus, .g-campo select:focus, .g-campo textarea:focus, .g-iglesia select:focus {
+  outline: none; border-color: var(--ocre-claro); box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.2);
+}
+.g-campo input:disabled, .g-campo select:disabled, .g-campo textarea:disabled { opacity: 0.7; cursor: default; }
+.g-campo textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+
+.g-aviso { max-width: 1200px; margin: 0.8rem auto 0; min-height: 1.3em; font-size: 0.9rem; color: var(--g-alerta); }
+.g-aviso.exito { color: var(--g-ok); }
+.g-contenido { display: grid; gap: 1.2rem; max-width: 1200px; margin: 0.6rem auto 0; min-width: 0; }
+.g-cargando, .g-vacio { margin: 0; padding: 1rem 0; color: var(--texto-suave); font-size: 0.92rem; }
+
+.g-tarjeta {
+  min-width: 0; padding: clamp(16px, 2.2vw, 24px); border: 1px solid var(--g-borde); border-radius: 16px;
+  background: var(--g-tarjeta); box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35);
+}
+.g-tarjeta h3, .g-encabezado h3 { margin: 0; font: 600 1.45rem/1.15 "Cormorant Garamond", Georgia, serif; }
+.g-tarjeta h4 { margin: 1.2rem 0 0.4rem; font-size: 1rem; }
+.g-sin-rol { max-width: 640px; margin: 1rem auto; text-align: center; }
+.g-sin-rol p { color: var(--texto-suave); line-height: 1.6; }
+
+.g-encabezado { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 0.8rem; }
+.g-encabezado p { margin: 0.25rem 0 0; color: var(--texto-suave); font-size: 0.9rem; }
+.g-encabezado-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+
+/* Botones */
+.g-btn {
+  min-height: 40px; padding: 0.5rem 0.95rem; border: 1px solid var(--borde-vidrio); border-radius: 999px;
+  background: var(--vidrio); color: var(--texto); font: 500 0.88rem var(--cuerpo); cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.g-btn:hover { border-color: var(--ocre-claro); color: var(--ocre-claro); }
+.g-btn:focus-visible { outline: 2px solid var(--ocre-claro); outline-offset: 2px; }
+.g-btn:disabled { opacity: 0.6; cursor: wait; }
+.g-btn.activo { border-color: var(--ocre-claro); color: var(--ocre-claro); background: rgba(233, 162, 59, 0.12); }
+.g-btn-principal { border-color: var(--ocre); background: var(--ocre); color: #1a1206; font-weight: 600; }
+.g-btn-principal:hover { background: var(--ocre-claro); color: #1a1206; }
+.g-btn-chico { min-height: 32px; padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+.g-btn-peligro { color: var(--g-alerta); }
+.g-btn-peligro:hover { border-color: var(--g-alerta); color: #FFB8A8; }
+.g-acciones { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+/* Etiquetas */
+.g-etiquetas { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.6rem 0; }
+.g-etiqueta {
+  display: inline-block; padding: 0.15rem 0.55rem; border: 1px solid var(--borde-vidrio); border-radius: 999px;
+  font-size: 0.75rem; color: var(--texto); white-space: nowrap;
+}
+.g-etiqueta.ok { border-color: rgba(155, 214, 180, 0.5); color: var(--g-ok); }
+.g-etiqueta.apagado { color: var(--texto-suave); border-style: dashed; }
+.g-etiqueta.alerta { border-color: var(--ocre); background: rgba(233, 162, 59, 0.15); color: var(--ocre-claro); }
+
+/* Filtros */
+.g-filtros { display: flex; flex-wrap: wrap; align-items: end; gap: 0.8rem; }
+.g-filtros .g-campo { flex: 1 1 180px; }
+.g-filtros .g-campo.ancho { flex: 2 1 320px; }
+.g-filtros-botones { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.g-conteo { margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--texto-suave); }
+
+/* Tabla */
+.g-tabla-caja { overflow-x: auto; border: 1px solid var(--borde-vidrio); border-radius: 12px; background: rgba(6, 9, 22, 0.55); }
+.g-tabla { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.g-tabla th { position: sticky; top: 0; padding: 0.65rem 0.8rem; background: #121834; color: var(--texto-suave); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.06em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+.g-tabla td { padding: 0.6rem 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.07); vertical-align: middle; overflow-wrap: anywhere; }
+.g-tabla tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+.g-tarjeta .g-tabla-caja { margin-top: 0.8rem; }
+
+/* Panel: tarjetas de números */
+.g-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
+.g-tile { display: grid; gap: 0.2rem; padding: 1rem 1.1rem; border: 1px solid var(--g-borde); border-radius: 14px; background: var(--g-tarjeta); }
+.g-tile-titulo { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-suave); }
+.g-tile strong { font: 600 2rem/1.1 "Cormorant Garamond", Georgia, serif; color: var(--texto); }
+.g-tile small { font-size: 0.8rem; color: var(--texto-suave); }
+.g-dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+.g-graficas { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; }
+
+/* Gráfica de barras (una serie: color de acento, tooltip al pasar) */
+.g-grafica { margin: 0; padding: clamp(16px, 2.2vw, 24px); border: 1px solid var(--g-borde); border-radius: 16px; background: var(--g-tarjeta); }
+.g-grafica figcaption { font: 600 1.25rem "Cormorant Garamond", Georgia, serif; }
+.g-barras { position: relative; display: flex; align-items: stretch; gap: 2px; height: 200px; margin-top: 1.4rem; padding: 0 0 1.6rem; border-bottom: 1px solid var(--borde-vidrio); }
+.g-barras-max { position: absolute; top: -1.15rem; left: 0; font-size: 0.72rem; color: var(--texto-suave); }
+.g-barras::before { content: ""; position: absolute; left: 0; right: 0; top: 0; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+.g-barra-col { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 0; outline: none; cursor: default; }
+.g-barra { width: min(70%, 42px); border-radius: 4px 4px 0 0; background: var(--ocre); transition: background 0.15s; }
+.g-barra-col:hover .g-barra, .g-barra-col:focus-visible .g-barra { background: var(--ocre-claro); }
+.g-barra-etiqueta { position: absolute; bottom: -1.5rem; max-width: 100%; overflow: hidden; font-size: 0.7rem; color: var(--texto-suave); text-overflow: ellipsis; white-space: nowrap; }
+.g-barra-col::after {
+  content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; z-index: 3; transform: translateX(-50%);
+  width: max-content; max-width: 220px; padding: 0.4rem 0.6rem; border: 1px solid var(--g-borde); border-radius: 8px;
+  background: #0d1222; color: var(--texto); font-size: 0.78rem; line-height: 1.35; white-space: normal; text-align: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.12s;
+}
+.g-barra-col:hover::after, .g-barra-col:focus-visible::after { opacity: 1; }
+.g-barra-col:first-of-type::after { left: 0; transform: none; }
+.g-barra-col:last-child::after { left: auto; right: 0; transform: none; }
+
+/* Listas */
+.g-lista { display: grid; gap: 0.6rem; margin: 0.8rem 0 0; padding: 0; list-style: none; }
+.g-lista li { display: grid; gap: 0.15rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
+.g-lista li:last-child { border-bottom: 0; padding-bottom: 0; }
+.g-lista li span { font-size: 0.85rem; color: var(--texto-suave); line-height: 1.45; overflow-wrap: anywhere; }
+.g-lista.compacta { gap: 0.3rem; margin-top: 0.3rem; }
+.g-lista.compacta li { padding-bottom: 0.3rem; }
+
+/* Rejilla de tarjetas (ministerios, anuncios) */
+.g-rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.g-ministerio, .g-anuncio { display: grid; align-content: start; gap: 0.45rem; }
+.g-ministerio p, .g-anuncio p { margin: 0; font-size: 0.88rem; line-height: 1.5; overflow-wrap: anywhere; }
+.g-dato span:first-child { color: var(--texto-suave); }
+.g-anuncio.importante { border-color: var(--ocre); }
+.g-anuncio .g-etiquetas { margin: 0; }
+.g-fecha { color: var(--texto-suave); font-size: 0.8rem !important; }
+.g-cuerpo { white-space: pre-line; }
+
+/* Formularios */
+.g-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
+.g-campo { display: grid; gap: 0.3rem; min-width: 0; margin: 0; padding: 0; border: 0; font-size: 0.84rem; color: var(--texto-suave); }
+.g-campo > span, .g-campo legend { font-size: 0.84rem; color: var(--texto-suave); }
+.g-campo small { font-size: 0.75rem; line-height: 1.4; }
+.g-campo.ancho, .g-form .ancho, .g-form-acciones { grid-column: 1 / -1; }
+.g-casilla { display: flex; align-items: center; gap: 0.5rem; min-height: 32px; font-size: 0.9rem; color: var(--texto); cursor: pointer; }
+.g-casilla input { width: 18px; height: 18px; accent-color: var(--ocre); }
+.g-checklist-caja { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.15rem 0.8rem; max-height: 220px; overflow: auto; padding: 0.5rem 0.7rem; border: 1px solid var(--borde-vidrio); border-radius: 10px; }
+.g-form-acciones { display: flex; flex-wrap: wrap-reverse; align-items: center; justify-content: flex-end; gap: 0.8rem; }
+.g-form-mensaje { flex: 1 1 200px; margin: 0; font-size: 0.88rem; color: var(--g-alerta); }
+.g-form-mensaje.exito { color: var(--g-ok); }
+
+/* Diálogo */
+.g-dialogo {
+  width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: clamp(18px, 3vw, 28px);
+  border: 1px solid var(--g-borde, rgba(246, 200, 119, 0.28)); border-radius: 16px; background: #0d1222; color: var(--texto);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+}
+.g-dialogo::backdrop { background: rgba(4, 6, 16, 0.82); backdrop-filter: blur(4px); }
+.g-dialogo-cabeza { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.g-dialogo-cabeza h3 { margin: 0; font: 600 1.6rem/1.15 "Cormorant Garamond", Georgia, serif; }
+.g-cerrar { width: 38px; height: 38px; border: 1px solid var(--borde-vidrio); border-radius: 50%; background: none; color: var(--texto); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.g-cerrar:hover { border-color: var(--ocre-claro); color: var(--ocre-claro); }
+.g-dialogo .g-campo input, .g-dialogo .g-campo select, .g-dialogo .g-campo textarea {
+  width: 100%; min-height: 42px; padding: 0.55rem 0.75rem; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05); color: var(--texto); color-scheme: dark; font: 0.95rem var(--cuerpo);
+}
+
+/* Calendario */
+.g-mes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.g-mes strong { min-width: 10ch; font: 600 1.3rem "Cormorant Garamond", Georgia, serif; text-align: center; }
+.g-segmento { display: inline-flex; flex-wrap: wrap; gap: 0.3rem; margin-left: auto; }
+.g-calendario-caja { overflow-x: auto; }
+.g-calendario { display: grid; grid-template-columns: repeat(7, minmax(96px, 1fr)); gap: 2px; min-width: 700px; border: 1px solid var(--borde-vidrio); border-radius: 12px; overflow: hidden; background: var(--borde-vidrio); }
+.g-dia-nombre { padding: 0.45rem; background: #121834; color: var(--texto-suave); font-size: 0.75rem; text-align: center; text-transform: uppercase; letter-spacing: 0.06em; }
+.g-dia { display: grid; align-content: start; gap: 3px; min-height: 104px; padding: 0.35rem; background: rgba(9, 13, 30, 0.95); }
+.g-dia.fuera { background: rgba(9, 13, 30, 0.7); }
+.g-dia.fuera .g-dia-num { opacity: 0.45; }
+.g-dia.hoy .g-dia-num { background: var(--ocre); color: #1a1206; }
+.g-dia-num { justify-self: end; display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--texto); font: 600 0.8rem var(--cuerpo); }
+button.g-dia-num { cursor: pointer; }
+button.g-dia-num:hover { outline: 1px solid var(--ocre-claro); }
+.g-chip {
+  display: block; width: 100%; padding: 0.2rem 0.35rem; overflow: hidden; border: 0; border-left: 3px solid var(--ocre); border-radius: 4px;
+  background: rgba(233, 162, 59, 0.14); color: var(--texto); font: 0.72rem/1.3 var(--cuerpo); text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
+}
+.g-chip span { color: var(--ocre-claro); font-weight: 600; }
+.g-chip:hover { background: rgba(233, 162, 59, 0.26); }
+.g-chip.cancelado { border-left-color: var(--texto-suave); background: rgba(255, 255, 255, 0.05); color: var(--texto-suave); text-decoration: line-through; }
+
+/* Asistencia */
+.g-detalle-evento { margin: 0; color: var(--ocre-claro); font-size: 0.92rem; }
+.g-asistencia { grid-template-columns: minmax(0, 1fr); }
+.g-pase { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.g-pase li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.5rem 0.7rem; border: 1px solid var(--borde-vidrio); border-radius: 10px; background: rgba(6, 9, 22, 0.55); }
+.g-pase li > span { min-width: 0; overflow-wrap: anywhere; font-size: 0.9rem; }
+.g-pase .g-segmento { margin-left: 0; }
+.g-opcion { position: relative; cursor: pointer; }
+.g-opcion input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.g-opcion span { display: inline-block; padding: 0.25rem 0.65rem; border: 1px solid var(--borde-vidrio); border-radius: 999px; font-size: 0.78rem; color: var(--texto-suave); }
+.g-opcion.presente input:checked + span { border-color: var(--g-ok); background: rgba(155, 214, 180, 0.15); color: var(--g-ok); }
+.g-opcion.ausente input:checked + span { border-color: var(--g-alerta); background: rgba(240, 160, 143, 0.12); color: var(--g-alerta); }
+.g-opcion input:focus-visible + span { outline: 2px solid var(--ocre-claro); outline-offset: 2px; }
+.g-opcion input:disabled { cursor: default; }
+
+/* Configuración */
+.g-logo { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.g-logo img, .g-logo-vacio { display: grid; place-items: center; width: 110px; height: 110px; border: 1px dashed var(--g-borde); border-radius: 14px; object-fit: contain; background: rgba(255, 255, 255, 0.04); color: var(--texto-suave); font-size: 0.8rem; }
+.g-reuniones { display: grid; gap: 0.6rem; }
+#g-reuniones { display: grid; gap: 0.6rem; }
+.g-reunion { display: grid; grid-template-columns: 150px 120px minmax(0, 1fr) auto; align-items: end; gap: 0.6rem; }
+.g-reuniones > .g-btn { justify-self: start; }
+
+/* Enlace "Gestión" en la navbar */
+.enlaces a[data-enlace-gestion], .menu-panel a[data-enlace-gestion] { color: var(--ocre-claro); }
+
+@media (max-width: 900px) {
+  .g-dos { grid-template-columns: minmax(0, 1fr); }
+  .g-graficas { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .g-form { grid-template-columns: minmax(0, 1fr); }
+  .g-reunion { grid-template-columns: 1fr 1fr; }
+  .g-reunion .g-campo:nth-child(3) { grid-column: 1 / -1; }
+  .g-segmento { margin-left: 0; }
+  .g-encabezado-botones { width: 100%; }
+  .g-modulos { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.3rem; }
+  .g-modulo { white-space: nowrap; }
+}

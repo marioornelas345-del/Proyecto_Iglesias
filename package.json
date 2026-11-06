@@ -1,0 +1,14 @@
+{
+  "name": "iglesias-merida",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "http-server . -p 5173 -o -c-1",
+    "revisar": "node scripts/revisar.mjs",
+    "probar": "node scripts/probar.mjs",
+    "test": "node scripts/revisar.mjs && node scripts/probar.mjs"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

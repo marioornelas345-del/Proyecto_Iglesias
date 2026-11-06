@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/revisar.mjs)",
+      "Bash(node scripts/probar.mjs)",
+      "PowerShell(node scripts/revisar.mjs)",
+      "PowerShell(node scripts/probar.mjs)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "node scripts/revisar.mjs --rapido" }
+        ]
+      }
+    ]
+  }
+}

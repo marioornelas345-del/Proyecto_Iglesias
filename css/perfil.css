@@ -1,0 +1,155 @@
+/* =========================================================
+   MI PERFIL
+   ========================================================= */
+.perfil {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: start;
+  max-width: 1080px;
+  margin: 2.2rem auto 0;
+}
+.perfil-tarjeta, .perfil-bloque {
+  padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid rgba(246, 200, 119, 0.28);
+  border-radius: 16px;
+  background: rgba(11, 15, 34, 0.72);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35);
+}
+.perfil-tarjeta { position: sticky; top: calc(var(--nav) + 16px); text-align: center; }
+.perfil-secciones { display: grid; gap: clamp(16px, 2.5vw, 28px); min-width: 0; }
+
+.perfil-avatar {
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  margin: 0 auto;
+  border: 2px solid var(--ocre-claro);
+  border-radius: 50%;
+  background: rgba(233, 162, 59, 0.15);
+  box-shadow: 0 0 30px rgba(233, 162, 59, 0.2);
+  font: 600 3.2rem "Cormorant Garamond", Georgia, serif;
+  color: var(--ocre-claro);
+  object-fit: cover;
+}
+.perfil-tarjeta h3 { margin: 0.9rem 0 0; font: 600 1.7rem/1.15 "Cormorant Garamond", Georgia, serif; overflow-wrap: anywhere; }
+.perfil-correo { margin: 0.25rem 0 0; font-size: 0.88rem; color: var(--texto-suave); overflow-wrap: anywhere; }
+.perfil-foto-botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+.perfil-foto-botones .boton-contorno { padding: 0.55rem 0.95rem; font: inherit; font-size: 0.82rem; }
+.perfil-tarjeta dl { display: grid; gap: 0.7rem; margin: 1.2rem 0 0; padding-top: 1.1rem; border-top: 1px solid var(--borde-vidrio); text-align: left; }
+.perfil-tarjeta dt { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--texto-suave); }
+.perfil-tarjeta dd { margin: 0.1rem 0 0; font-size: 0.95rem; }
+.perfil-tarjeta > .boton-contorno { display: flex; justify-content: center; width: 100%; margin-top: 1.2rem; font: inherit; font-size: 0.9rem; }
+
+.perfil-bloque h3 { margin: 0; font: 600 1.55rem/1.15 "Cormorant Garamond", Georgia, serif; }
+.perfil-ayuda { margin: 0.3rem 0 0; font-size: 0.88rem; line-height: 1.5; color: var(--texto-suave); }
+.perfil-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; margin-top: 1rem; }
+.perfil-campo { display: grid; gap: 0.3rem; min-width: 0; font-size: 0.85rem; color: var(--texto-suave); }
+.perfil-campo.ancho, .perfil-acciones { grid-column: 1 / -1; }
+.perfil-campo input, .perfil-campo select, .perfil-campo textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--texto);
+  color-scheme: dark;
+  font: 1rem var(--cuerpo);
+}
+.perfil-campo select option { background: #0d1222; }
+.perfil-campo textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+.perfil-campo input[readonly] { border-style: dashed; background: none; color: var(--ocre-claro); cursor: default; }
+.perfil-campo input:focus, .perfil-campo select:focus, .perfil-campo textarea:focus { outline: none; border-color: var(--ocre-claro); box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.2); }
+.perfil-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem; }
+.perfil-mensaje { margin: 0; font-size: 0.9rem; color: #F0A08F; }
+.perfil-mensaje.exito { color: #9BD6B4; }
+.perfil-tarjeta .perfil-mensaje { margin-top: 0.6rem; }
+
+.perfil-progreso { height: 6px; margin-top: 0.9rem; overflow: hidden; border-radius: 999px; background: var(--vidrio); }
+.perfil-progreso span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--ocre), var(--ocre-claro)); transition: width 0.3s; }
+.perfil-templos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.7rem; margin-top: 1rem; }
+.perfil-templo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 12px;
+  background: linear-gradient(160deg, #1d2440, #0d1222);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.perfil-templo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.55) saturate(0.6); transition: filter 0.2s; }
+.perfil-templo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(6, 7, 18, 0.92)); }
+.perfil-templo span { position: absolute; left: 9px; right: 9px; bottom: 8px; z-index: 1; font-size: 0.8rem; font-weight: 500; line-height: 1.2; }
+.perfil-templo:hover { border-color: var(--ocre-claro); }
+.perfil-templo[aria-pressed="true"] { border-color: var(--ocre-claro); box-shadow: 0 0 0 1px var(--ocre-claro); }
+.perfil-templo[aria-pressed="true"] img { filter: none; }
+.perfil-templo[aria-pressed="true"]::before {
+  content: "✓";
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ocre-claro);
+  color: #1a1206;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.perfil-templo:focus-visible { outline: 2px solid var(--ocre-claro); outline-offset: 2px; }
+
+/* Eliminar mi cuenta */
+.perfil-eliminar {
+  margin-top: 0.9rem;
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  background: none;
+  color: #F0A08F;
+  font: inherit;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.perfil-eliminar:hover { color: #FFB8A8; }
+.perfil-eliminar:focus-visible { outline: 2px solid #F0A08F; outline-offset: 2px; border-radius: 4px; }
+
+.confirmar {
+  width: min(440px, calc(100vw - 32px));
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid rgba(240, 160, 143, 0.45);
+  border-radius: 16px;
+  background: #0d1222;
+  color: var(--texto);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+}
+.confirmar::backdrop { background: rgba(4, 6, 16, 0.82); backdrop-filter: blur(4px); }
+.confirmar form { display: grid; gap: 0.9rem; }
+.confirmar h2 { margin: 0; font: 600 1.7rem/1.15 "Cormorant Garamond", Georgia, serif; }
+.confirmar p { margin: 0; font-size: 0.92rem; line-height: 1.55; color: var(--texto-suave); }
+.confirmar strong { color: #F0A08F; font-weight: 600; }
+.confirmar-botones { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.6rem; }
+.confirmar-botones button { font: inherit; font-size: 0.9rem; }
+.boton-peligro { background: #C9573F; border-color: #C9573F; color: #fff; }
+.boton-peligro:hover { background: #DB6A51; }
+.boton-peligro:disabled { opacity: 0.6; cursor: wait; }
+
+.perfil-aviso { max-width: 1080px; margin: 1.4rem auto 0; font-size: 0.8rem; line-height: 1.6; text-align: center; color: var(--texto-suave); }
+
+@media (max-width: 900px) {
+  .perfil { grid-template-columns: minmax(0, 1fr); }
+  .perfil-tarjeta { position: static; }
+}
+@media (max-width: 560px) {
+  .perfil-form, .perfil-templos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .perfil-form { grid-template-columns: minmax(0, 1fr); }
+}
